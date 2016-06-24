@@ -1,5 +1,6 @@
 'use strict';
 
+var gulp = require('gulp');
 var pathUtil = require('path');
 var Q = require('q');
 var gulp = require('gulp');
@@ -16,6 +17,7 @@ var utils = require('../utils');
 var projectDir = jetpack;
 var srcDir = projectDir.cwd('./app');
 var destDir = projectDir.cwd('./build');
+var jsTransformDir = projectDir.cwd('./transform');
 
 var paths = {
     copyFromAppDir: [
@@ -30,26 +32,21 @@ var paths = {
 // Tasks
 // -------------------------------------
 
-gulp.task('clean', function () {
-    return destDir.dirAsync('.', { empty: true });
-});
-
-
 var copyTask = function () {
     return projectDir.copyAsync('app', destDir.path(), {
             overwrite: true,
             matching: paths.copyFromAppDir
         });
 };
-gulp.task('copy', ['clean'], copyTask);
+gulp.task('copy', ['copy:dist']);
 gulp.task('copy-watch', copyTask);
 
 
 var bundleApplication = function () {
     return Q.all([
-            bundle(srcDir.path('background.js'), destDir.path('background.js')),
-            bundle(srcDir.path('app.js'), destDir.path('app.js')),
-        ]);
+        bundle(srcDir.path('background.js'), destDir.path('background.js')),
+        bundle(srcDir.path('app.js'), destDir.path('app.js'))
+    ]);
 };
 
 var bundleSpecs = function () {
@@ -64,7 +61,7 @@ var bundleTask = function () {
     }
     return bundleApplication();
 };
-gulp.task('bundle', ['clean'], bundleTask);
+gulp.task('bundle', [], bundleTask);
 gulp.task('bundle-watch', bundleTask);
 
 
@@ -111,4 +108,13 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('build', ['bundle', 'less', 'copy', 'environment', 'package-json']);
+gulp.task('build', ['clean'], function() {
+  return gulp.start(['bundle', 'less', 'copy', 'environment', 'package-json', 'es6-transformed'], function() {
+
+    return gulp.start(['inject'], function() {
+      return gulp.start(['bundle'], function() {
+
+      });
+    });
+  });
+});
