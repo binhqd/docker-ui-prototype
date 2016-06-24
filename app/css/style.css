@@ -1,0 +1,217 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+}
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+input:focus,
+button:focus {
+    outline: none;
+}
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+/* Layout */
+.container-full {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    color: #fff;
+}
+.header {
+    width: 100%;
+    height: 50px;
+    background-color: #333333;
+    position: relative;
+    z-index: 2;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+.header .title {
+    font-size: 20px;
+    margin: 0;
+    padding: 11px 20px;
+}
+.main-content {
+    display: flex;
+    flex: 1;
+}
+.col-left,
+.col-right {
+    width: 300px;
+    background-color: #333333;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    padding: 20px;
+    overflow-y: auto;
+}
+.col-primary {
+    flex: 1;
+    background: url(../images/tiny_grid.png);
+}
+.col-right {
+    padding: 0;
+}
+.form-action {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.wrap-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+.wrap-bottom {
+    padding: 20px;
+}
+
+
+/* Component */
+.form-search {
+    position: relative;
+}
+.button-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+.form-label {
+    margin-bottom: 5px;
+    display: block;
+    color: rgba(255,255,255, 0.7);
+    font-size: 13px;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.9);
+}
+.form-input {
+    width: 100%;
+    height: 36px;
+    background: #333;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    outline: none;
+    padding: 10px 15px;
+    font-size: 13px;
+    color: rgba(255,255,255, 0.7);
+}
+textarea.form-input {
+    min-height: 100px;
+    resize: vertical;
+}
+select.form-input {
+    -webkit-border-radius: 0;
+    -webkit-appearance: none;
+    background: url(../images/arrow.svg) no-repeat right center;
+    background-size: 29px;
+}
+.form-input[type="range"] {
+    padding: 10px 0;
+    border: none;
+}
+.checkbox,
+.radio {
+    font-size: 13px;
+    color: rgba(255,255,255, 0.7);
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.checkbox-inline label + label,
+.radio-inline label + label {
+    margin-left: 20px;
+}
+
+.list-result {
+    padding: 0;
+    list-style: none;
+    margin-top: 30px;
+}
+.list-result .list {
+    border-radius: 3px;
+    border: 1px dashed #fff;
+    padding: 10px 15px;
+    font-size: 12px;
+}
+.list-result .list:hover {
+    cursor: pointer;
+}
+.list-result .list + .list {
+    margin-top: 15px;
+}
+.list-result .list .link {
+    color: #22b8eb;
+    text-decoration: none;
+    cursor: pointer;
+}
+.list-result .list .desc {
+    margin-top: 10px;
+}
+
+
+/* Need to removed when dev app */
+.demo {
+    padding: 20px;
+    font-size: 20px;
+    color: #111;
+}
+/* End */
+
+.button-start {
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    background-color: #22b8eb;
+    color: #FFF;
+    border: none;
+    transition: background-color .3s ease;
+}
+.button-start:hover {
+    cursor: pointer;
+    background-color: #1a95bf;
+}
+
+/* Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #e1e1e1;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #000000;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #666666;
+}
+::-webkit-scrollbar-track:active {
+  background: #333333;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
