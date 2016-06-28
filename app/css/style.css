@@ -215,3 +215,64 @@ select.form-input {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* Bottom */
+.bottom-content {
+    min-height: 50px;
+    height: 150px;
+    background-color: #222222;
+    position: relative;
+    top: auto !important;
+}
+/*.bottom-content .dragbar {
+    position: absolute;
+    height: 10px;
+    width: 100%;
+    cursor: row-resize;
+    top: -5px;
+}*/
+.bottom-content .tabs {
+    width: 200px;
+    float: left;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+}
+.bottom-content .tabs li {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #1c1c1c;
+}
+.bottom-content .tabs li.current {
+    background-color: #131313;
+}
+.bottom-content .tab-content {
+    display: none;
+    overflow: hidden;
+    height: 100%;
+    padding: 10px 10px 10px 20px;
+    font-size: 14px;
+    line-height: 22px;
+    overflow-y: auto; 
+}
+.bottom-content .tab-content.current {
+    display: inherit;
+}
+.cmd {
+    display: flex;
+}
+.cmd .typing-cmd {
+    flex: 1;
+}
+.cmd input {
+    width: 100%;
+    border: none;
+    background: none;
+    color: #fff;
+}
+
