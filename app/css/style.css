@@ -63,8 +63,7 @@ body {
 }
 .wrap-content {
     flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 .wrap-bottom {
     padding: 20px;
@@ -202,7 +201,7 @@ select.form-input {
   background: #000000;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #222222;
   border: 0px none #ffffff;
   border-radius: 0px;
 }
@@ -258,7 +257,7 @@ select.form-input {
     padding: 10px 10px 10px 20px;
     font-size: 14px;
     line-height: 22px;
-    overflow-y: auto; 
+    overflow-y: auto;
 }
 .bottom-content .tab-content.current {
     display: inherit;
@@ -276,3 +275,57 @@ select.form-input {
     color: #fff;
 }
 
+/* Accordion */
+.accordion-heading {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    background: #222222;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.accordion-heading .title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+.accordion-heading .icon-toggle {
+    width: 15px;
+    position: relative;
+    display: block;
+}
+.accordion-heading .icon-toggle:before {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 15px;
+    background-color: #FFF;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-top: -7px;
+}
+.accordion-heading .icon-toggle:after {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 1px;
+    background-color: #fcfcfc;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -7px;
+}
+.accordion-heading .icon-toggle.open:before {
+    opacity: 0;
+}
+.accordion-content {
+    padding: 20px;
+}
+.accordion-content {
+    display: none;
+}

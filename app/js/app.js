@@ -65,6 +65,21 @@ $(document).ready(function() {
     maxHeight: 300
   });
 
+  // Accordion
+  $('.accordion .accordion-heading:first-child').next().show();
+  $('.accordion .accordion-heading').click(function() {
+    var $this = $(this);
+    if ($this.next().hasClass('show')) {
+      $this.find('.icon-toggle').removeClass('open');
+      $this.next().removeClass('show');
+      $this.next().slideUp(350);
+    } else {
+      $this.find('.icon-toggle').addClass('open');
+      $this.next().addClass('show');
+      $this.next().slideDown(350);
+    }
+  });
+
 
   // testing only
   var response = {
