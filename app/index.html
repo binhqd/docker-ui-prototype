@@ -11,7 +11,7 @@
     <!-- endinject -->
     <style>
     #myCanvas {
-      height: 100%;
+      height: calc(100vh - 50px);
     }
     #operation {
       font-size:28px;
@@ -58,59 +58,95 @@
             <div class="col-right">
                 <form class="form-action" action="#" id='containerProps'>
                     <div class="wrap-content">
-                        <div class="form-group">
-                            <label class="form-label" for="#">Text:</label>
-                            <input class="form-input" type="text" name="" id="" rv-input="prop.tag">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Textarea:</label>
-                            <textarea class="form-input" name="" id="" cols="30" rows="10" rv-input="prop.description"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Dropdown:</label>
-                            <select class="form-input" name="" id="">
-                                <option value="1">Options #1</option>
-                                <option value="1">Options #2</option>
-                                <option value="1">Options #3</option>
-                                <option value="1">Options #4</option>
-                                <option value="1">Options #5</option>
-                                <option value="1">Options #6</option>
-                                <option value="1">Options #7</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Slider:</label>
-                            <input class="form-input" type="range" min="0" max="100" step="1" value="30">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Number:</label>
-                            <input class="form-input" type="number" min="1" max="500" value="10">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Checkbox:</label>
-                            <div class="checkbox checkbox-inline">
-                                <label for="checkbox1">
-                                    <input type="checkbox" id="checkbox1" name="checkbox1"> Checkbox 1
-                                </label>
-                                <label for="checkbox2">
-                                    <input type="checkbox" id="checkbox2" name="checkbox1"> Checkbox 2
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="#">Radio:</label>
-                            <div class="radio radio-inline">
-                                <label for="radio1">
-                                    <input type="radio" id="radio1" name="radio"> Radio 1
-                                </label>
-                                <label for="radio2">
-                                    <input type="radio" id="radio2" name="radio"> Radio 2
-                                </label>
-                                <label for="radio3">
-                                    <input type="radio" id="radio3" name="radio"> Radio 3
-                                </label>
-                            </div>
-                        </div>
+                        <dl class="accordion">
+                            <dt class="accordion-heading">
+                                <h4 class="title">Group 1</h4>
+                                <i class="icon-toggle open"></i>
+                            </dt>
+                            <dd class="accordion-content show">
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Text:</label>
+                                    <input class="form-input" type="text" name="" id="" rv-input="prop.tag">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Textarea:</label>
+                                    <textarea class="form-input" name="" id="" cols="30" rows="10" rv-input="prop.description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Dropdown:</label>
+                                    <select class="form-input" name="" id="">
+                                        <option value="1">Options #1</option>
+                                        <option value="1">Options #2</option>
+                                        <option value="1">Options #3</option>
+                                        <option value="1">Options #4</option>
+                                        <option value="1">Options #5</option>
+                                        <option value="1">Options #6</option>
+                                        <option value="1">Options #7</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Slider:</label>
+                                    <input class="form-input" type="range" min="0" max="100" step="1" value="30">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Number:</label>
+                                    <input class="form-input" type="number" min="1" max="500" value="10">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Checkbox:</label>
+                                    <div class="checkbox checkbox-inline">
+                                        <label for="checkbox1">
+                                            <input type="checkbox" id="checkbox1" name="checkbox1"> Checkbox 1
+                                        </label>
+                                        <label for="checkbox2">
+                                            <input type="checkbox" id="checkbox2" name="checkbox1"> Checkbox 2
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Radio:</label>
+                                    <div class="radio radio-inline">
+                                        <label for="radio1">
+                                            <input type="radio" id="radio1" name="radio"> Radio 1
+                                        </label>
+                                        <label for="radio2">
+                                            <input type="radio" id="radio2" name="radio"> Radio 2
+                                        </label>
+                                        <label for="radio3">
+                                            <input type="radio" id="radio3" name="radio"> Radio 3
+                                        </label>
+                                    </div>
+                                </div>
+                            </dd>
+                            <dt class="accordion-heading">
+                                <h4 class="title">Group 2</h4>
+                                <i class="icon-toggle"></i>
+                            </dt>
+                            <dd class="accordion-content">
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Text:</label>
+                                    <input class="form-input" type="text" name="" id="" rv-input="prop.tag">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Textarea:</label>
+                                    <textarea class="form-input" name="" id="" cols="30" rows="10" rv-input="prop.description"></textarea>
+                                </div>
+                            </dd>
+                            <dt class="accordion-heading">
+                                <h4 class="title">Group 3</h4>
+                                <i class="icon-toggle"></i>
+                            </dt>
+                            <dd class="accordion-content">
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Text:</label>
+                                    <input class="form-input" type="text" name="" id="" rv-input="prop.tag">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="#">Textarea:</label>
+                                    <textarea class="form-input" name="" id="" cols="30" rows="10" rv-input="prop.description"></textarea>
+                                </div>
+                            </dd>
+                        </dl>
                     </div>
                     <div class="wrap-bottom">
                         <button class="button-start" type="submit">Get started</button>
