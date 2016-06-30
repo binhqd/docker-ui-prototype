@@ -11,7 +11,7 @@
     <!-- endinject -->
     <style>
     #myCanvas {
-      height: 100%;
+      height: 100vh;
     }
     #operation {
       font-size:28px;
@@ -126,11 +126,11 @@
             <div id="tab-1" class="tab-content current">
                 <div class="cmd">Loading...</div>
                 <div class="cmd">Initialize system</div>
-                <div class="cmd">
+                <div class="cmd" id="containerHostCommandInput">
                     <span style="color: green">{ $hahuutin-PC }</span>
                     <span style="color: red; padding: 0 5px">>></span>
-                    <form class="typing-cmd" action="./" name="formTyping">
-                        <input class="typing" type="text" name="typing" autofocus>
+                    <form class="typing-cmd" action="./" name="formTyping" onsubmit="return false;">
+                        <input class="typing" type="text" name="typing" autofocus id="hostCommandInput">
                     </form>
                 </div>
             </div>
