@@ -138,14 +138,30 @@ select.form-input {
 .list-result .list {
     border-radius: 3px;
     border: 1px dashed #fff;
-    padding: 10px 15px;
+    padding: 10px;
     font-size: 12px;
+    display: flex;
 }
 .list-result .list:hover {
     cursor: pointer;
 }
 .list-result .list + .list {
     margin-top: 15px;
+}
+.list-result .list .area-image {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 10px;
+    width: 50px;
+}
+.list-result .list .image {
+    max-width: 100%;
+    height: auto;
+}
+.list-result .list .area-content {
+    flex: 1;
+    margin-top: -3px;
 }
 .list-result .list .link {
     color: #22b8eb;
@@ -155,7 +171,6 @@ select.form-input {
 .list-result .list .desc {
     margin-top: 10px;
 }
-
 
 /* Need to removed when dev app */
 .demo {

@@ -198,8 +198,13 @@
         <!-- <li class='no-result'>No result found</li> -->
         {{#each results}}
         <li class="list" data-tag="{{repo_name}}">
-            <h3 class="title"><a class="link" href="#">{{repo_name}}</a></h3>
-            <p class="desc"><strong>Description:</strong> {{short_description}}</p>
+            <div class="area-image">
+                <img class="image" src="http://placehold.it/50x50" alt="image logo">
+            </div>
+            <div class="area-content">
+                <h3 class="title"><a class="link" href="#">{{repo_name}}</a></h3>
+                <p class="desc"><strong>Description:</strong> {{short_description}}</p>
+            </div>
         </li>
         {{/each}}
         {{#isEmpty results}}
