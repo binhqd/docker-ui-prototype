@@ -5,7 +5,8 @@ var network = null;
 var template;
 var hashContainers = [];
 var di = {
-  selected: null
+  selected: null,
+  showContainerProps: false
 };
 
 
@@ -40,12 +41,13 @@ function doSearch(event) {
   }, 500);
 }
 
+var dockerImage = new DockerImage();
+
 $(document).ready(function() {
   $('#txtSearchDockerImages').keyup(doSearch);
 
   var source = $("#listDockerImageItemTemplate").html();
   template = Handlebars.compile(source);
-
 
   // Add tabs terminal
   $('.tabs li').click(function() {
@@ -62,11 +64,12 @@ $(document).ready(function() {
   $('.bottom-content').resizable({
     handles: "n",
     minHeight: 100,
-    maxHeight: 300
+    maxHeight: 200
   });
 
   // Accordion
   $('.accordion .accordion-heading:first-child').next().show();
+
   $('.accordion .accordion-heading').click(function() {
     var $this = $(this);
     if ($this.next().hasClass('show')) {
@@ -79,7 +82,6 @@ $(document).ready(function() {
       $this.next().slideDown(350);
     }
   });
-
 
   // testing only
   var response = {
@@ -278,10 +280,13 @@ function isContainerExisted(idOrName) {
 
 var CommandLogger = {
   invalidCommand: function(cmd) {
-    $('#containerHostCommandInput').before($('<div class="cmd"><i>' + cmd + '</i>: Invalid command</div>'));
+    $('#containerHostCommandInput').before($('<div class="cmd">Unknown command: <i>' + cmd + '</i></div>'));
   },
   containerNotExist: function(idOrName) {
     $('#containerHostCommandInput').before($('<div class="cmd"><i>Container \"' + idOrName + '\" not exist</i></div>'));
+  },
+  imageNotExist: function(idOrName) {
+    $('#containerHostCommandInput').before($('<div class="cmd"><i>Image: \"' + idOrName + '\" not exist</i></div>'));
   },
   log: function(str) {
     $('#containerHostCommandInput').before($('<div class="cmd">' + str + '</div>'));
@@ -296,8 +301,16 @@ function sendHostCommand(cmd) {
 
   if (testAdd) {
     var imageName = testAdd[1];
-    addNode(imageName, {});
-    $('#containerHostCommandInput').before($('<div class="cmd">' + cmd + '</div>'));
+
+    dockerImage.getDockerImageInfo(imageName, function(response) {
+      console.log(response);
+      addNode(imageName, {});
+      $('#containerHostCommandInput').before($('<div class="cmd">' + cmd + '</div>'));
+    }, function(err) {
+      CommandLogger.imageNotExist(imageName);
+    });
+
+
   } else if (cmd.match(linkContainerPattern)) {
     var testLink = cmd.match(linkContainerPattern);
 
@@ -311,9 +324,15 @@ function sendHostCommand(cmd) {
   $('#hostCommandInput').val('');
 }
 
+var defaultBind = {
+  showingContainerProps: false
+};
 function applyDragDrop() {
   $("#listDockerImages li").draggable({
-    helper: "clone"
+    helper: "clone",
+    start: function(e, ui) {
+      $(ui.helper).addClass("imageDraggableHelper");
+    }
   });
 
   $("#myCanvas").droppable({
@@ -329,7 +348,13 @@ function applyDragDrop() {
       });
     }
   });
+
+  $('#containerProps').hide();
+  $('#linkProps').hide();
+
+  rivets.bind($('#containerProps'), defaultBind);
 }
+
 
 var nodesData = [],
   edgesData = [];
@@ -381,9 +406,14 @@ function addNode(label, options) {
       font: {
         align: 'left'
       },
+      // common
       tag: label,
+      version: 'Latest',
       description: options.description,
-      shape: 'box'
+      shape: 'box',
+      // Build
+      buildTag: '',
+      buildCpu: ''
     };
 
     if (!isNaN(options.x)) {
@@ -402,9 +432,21 @@ function addNode(label, options) {
 }
 
 function findContainer(id) {
-  return hashContainers.filter(function(item) {
-    return item.id == id;
-  });
+  for (var i in nodes._data) {
+    if (nodes._data[i].id == id) {
+      return nodes._data[i];
+    }
+  }
+  return null;
+}
+
+function findLink(id) {
+  for (var i in edges._data) {
+    if (edges._data[i].id == id) {
+      return edges._data[i];
+    }
+  }
+  return null;
 }
 
 function draw() {
@@ -421,11 +463,31 @@ function draw() {
 
   // create a network
   var container = document.getElementById('myCanvas');
+
+  var locales = {
+    en: {
+      edit: 'Edit',
+      del: 'Delete selected',
+      back: 'Back',
+      addNode: 'Add Container',
+      addEdge: 'Add Link',
+      editNode: 'Edit Container',
+      editEdge: 'Edit Link',
+      addDescription: 'Click in an empty space to place a new container.',
+      edgeDescription: 'Click on a container and drag the link to another container to connect them.',
+      editEdgeDescription: 'Click on the control points and drag them to a container to connect to it.',
+      createEdgeError: 'Cannot link to a cluster.',
+      deleteClusterError: 'Clusters cannot be deleted.',
+      editClusterError: 'Clusters cannot be edited.'
+    }
+  }
+
   var options = {
     layout: {
       randomSeed: seed
     }, // just to make sure the layout is the same when the locale is changed
     locale: 'en',
+    locales: locales,
     height: '100%',
     width: '100%',
     edges: {
@@ -522,9 +584,42 @@ function draw() {
   network.on('release', function(a, b, c, d) {
     console.log(a, b, c, d);
   });
-  network.on("select", function(params) {
+
+  var currentBinding = null;
+  var currentLinkBinding = null;
+
+  network.on("deselectEdge", function(params) {
+    di.selected = null;
+    $('#linkProps').hide();
+    if (currentLinkBinding) {
+      currentLinkBinding.unbind();
+    }
+
+    if (params.links.length == 0) {
+      // TODO: Disable property inputs
+    }
+  });
+  network.on("selectEdge", function(params) {
+    if (params.edges.length > 0) {
+      var filters = findLink(params.edges[0]);
+      if (filters.length) {
+        di.selectedLink = filters[0];
+      } else {
+        di.selectedLink = null;
+      }
+
+      $('#linkProps').show();
+
+      currentLinkBinding = rivets.bind($('#linkProps'), {
+        linkProps: di.selectedLink
+      });
+      console.log(currentBinding);
+    }
+  });
+  network.on("selectNode", function(params) {
     // if selected item is a node
     console.log(params);
+    defaultBind.showingContainerProps = true;
     if (params.nodes.length > 0) {
       var filters = findContainer(params.nodes[0]);
       if (filters.length) {
@@ -533,13 +628,25 @@ function draw() {
         di.selected = null;
       }
 
-      rivets.bind($('#containerProps'), {
-        prop: di.selected
-      })
-    } else { // if selected item is an edge
+      $('#containerProps').show();
 
+      currentBinding = rivets.bind($('#containerProps'), {
+        containerProps: di.selected
+      });
+      console.log(currentBinding);
     }
-  })
+  });
+
+  network.on("deselectNode", function(params) {
+    di.selected = null;
+    $('#containerProps').hide();
+    if (currentBinding) {
+      currentBinding.unbind();
+    }
+    if (params.nodes.length == 0) {
+      // TODO: Disable property inputs
+    }
+  });
 }
 
 function clearPopUp() {
@@ -562,6 +669,13 @@ function saveData(data, callback) {
 
 Handlebars.registerHelper('isEmpty', function(arr, options) {
   if (arr.length == 0) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+Handlebars.registerHelper('isDefined', function(obj, options) {
+  if (obj) {
     return options.fn(this);
   }
   return options.inverse(this);

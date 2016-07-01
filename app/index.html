@@ -44,7 +44,7 @@
         </div>
         <div class="main-content">
             <div class="col-left">
-                <form class="form-search" action="#">
+                <form class="form-search" action="#" onsubmit="return false;">
                     <input class="form-input" type="text" placeholder="Search for docker images..." id="txtSearchDockerImages">
                     <button class="button button-icon">
                         <img src="images/search.svg" alt="search icon" width="35" height="35">
@@ -60,7 +60,10 @@
 
             </div>
             <div class="col-right">
-                <form class="form-action" action="#" id='containerProps'>
+                <form class="form-action" action="#" id='linkProps' onsubmit="return false;">
+                  <h3>Link Prop</h3>
+                </form>
+                <form class="form-action" action="#" id='containerProps' onsubmit="return false;">
                     <div class="wrap-content">
                         <dl class="accordion">
                             <dt class="accordion-heading">
@@ -71,7 +74,7 @@
                               <div class="form-group">
                                   <label class="form-label" for="#">From: <b rv-text="containerProps.tag"></b></label>
                               </div>
-                              <div class="form-group">
+                              <div class="form-group inline">
                                   <label class="form-label" for="#">Version:</label>
                                   <select class="form-input" name="" id="" rv-value="containerProps.version">
                                       <option value="Latest">Latest</option>
@@ -86,22 +89,22 @@
                                 <i class="icon-toggle"></i>
                             </dt>
                             <dd class="accordion-content">
-                                <div class="form-group">
+                                <div class="form-group inline">
                                     <label class="form-label" for="#">CPUs:</label>
-                                    <select class="form-input" name="" id="" rv-value="containerProps.build.cpu">
+                                    <select class="form-input" name="" id="" rv-value="containerProps.buildCpu">
                                         <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="#" rv-value="containerProps.build.memory">Memory:</label>
                                     <select class="form-input" name="" id="">
-                                        <option value="1">512 Mb</option>
-                                        <option value="1">1024 Mb</option>
-                                        <option value="1">2048 Mb</option>
-                                        <option value="1">4096 Mb</option>
+                                        <option value="512 Mb">512 Mb</option>
+                                        <option value="1024 Mb">1024 Mb</option>
+                                        <option value="2048 Mb">2048 Mb</option>
+                                        <option value="4096 Mb">4096 Mb</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -120,7 +123,7 @@ COPY data /data
                                     <textarea class="form-input" name="" id="" cols="30" rows="10" rv-input="containerProps.build.environments"></textarea>
                                 <!--
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group inline">
                                     <label class="form-label" for="#">Dropdown:</label>
                                     <select class="form-input" name="" id="">
                                         <option value="1">Options #1</option>
@@ -140,31 +143,35 @@ COPY data /data
                                     <label class="form-label" for="#">Number:</label>
                                     <input class="form-input" type="number" min="1" max="500" value="10">
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="#">Checkbox:</label>
-                                    <div class="checkbox checkbox-inline">
-                                        <label for="checkbox1">
-                                            <input type="checkbox" id="checkbox1" name="checkbox1"> Checkbox 1
-                                        </label>
-                                        <label for="checkbox2">
-                                            <input type="checkbox" id="checkbox2" name="checkbox1"> Checkbox 2
-                                        </label>
+                                <fieldset class="form-fieldset">
+                                    <legend class="form-legend">Area settings</legend>
+                                    <div class="form-group">
+                                        <label class="form-label" for="#">Checkbox:</label>
+                                        <div class="checkbox checkbox-inline">
+                                            <label for="checkbox1">
+                                                <input type="checkbox" id="checkbox1" name="checkbox1"> Checkbox 1
+                                            </label>
+                                            <label for="checkbox2">
+                                                <input type="checkbox" id="checkbox2" name="checkbox1"> Checkbox 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="#">Radio:</label>
+                                        <div class="radio radio-inline">
+                                            <label for="radio1">
+                                                <input type="radio" id="radio1" name="radio"> Radio 1
+                                            </label>
+                                            <label for="radio2">
+                                                <input type="radio" id="radio2" name="radio"> Radio 2
+                                            </label>
+                                            <label for="radio3">
+                                                <input type="radio" id="radio3" name="radio"> Radio 3
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label" for="#">Radio:</label>
-                                    <div class="radio radio-inline">
-                                        <label for="radio1">
-                                            <input type="radio" id="radio1" name="radio"> Radio 1
-                                        </label>
-                                        <label for="radio2">
-                                            <input type="radio" id="radio2" name="radio"> Radio 2
-                                        </label>
-                                        <label for="radio3">
-                                            <input type="radio" id="radio3" name="radio"> Radio 3
-                                        </label>
-                                    </div>
-                                </div>
+                              </fieldset>
                               -->
                             </dd>
                             <dt class="accordion-heading">
@@ -203,8 +210,8 @@ COPY data /data
                                         </label>
                                     </div>
                                 </div>
-                                <fieldset>
-                                  <legend>Network</legend>
+                                <fieldset class="form-fieldset">
+                                  <legend class="form-legend">Network</legend>
                                   <div class="form-group">
                                       <label class="form-label" for="#">DNS(s):</label>
                                       <textarea class="form-input" name="" id="" cols="30" rows="4" rv-input="containerProps.run.dns"></textarea>
@@ -218,8 +225,8 @@ COPY data /data
                                   <label class="form-label" for="#">Security Options:</label>
                                   <input class="form-input" type="text" name="" id="" rv-input="containerProps.run.securityOptions">
                               </div>
-                              <fieldset>
-                                <legend>Runtime Privilege</legend>
+                              <fieldset class="form-fieldset">
+                                <legend class="form-legend">Runtime Privilege</legend>
                                 <div class="form-group">
                                     <label class="form-label" for="#">Privileged:</label>
                                     <div class="radio radio-inline">
@@ -247,10 +254,8 @@ COPY data /data
                 <li class="tab-link" data-tab="tab-2">Guest</li>
             </ul>
             <div id="tab-1" class="tab-content current">
-                <div class="cmd">Loading...</div>
-                <div class="cmd">Initialize system</div>
                 <div class="cmd" id="containerHostCommandInput">
-                    <span style="color: green">{ $hahuutin-PC }</span>
+                    <!-- <span style="color: green">{ $root }</span> -->
                     <span style="color: red; padding: 0 5px">>></span>
                     <form class="typing-cmd" action="./" name="formTyping" onsubmit="return false;">
                         <input class="typing" type="text" name="typing" autofocus id="hostCommandInput" autocomplete="off">
@@ -258,7 +263,13 @@ COPY data /data
                 </div>
             </div>
             <div id="tab-2" class="tab-content">
-                Content tab 2
+              <div class="cmd" id="containerGuessCommandInput">
+                  <!-- <span style="color: green">{ $root }</span> -->
+                  <span style="color: red; padding: 0 5px">>></span>
+                  <form class="typing-cmd" action="./" name="formTyping" onsubmit="return false;">
+                      <input class="typing" type="text" name="typing" autofocus id="guessCommandInput" autocomplete="off">
+                  </form>
+              </div>
             </div>
         </div>
     </div>
@@ -285,8 +296,17 @@ COPY data /data
         <!-- <li class='no-result'>No result found</li> -->
         {{#each results}}
         <li class="list" data-tag="{{repo_name}}">
-            <h3 class="title"><a class="link" href="#">{{repo_name}}</a></h3>
-            <p class="desc"><strong>Description:</strong> {{short_description}}</p>
+            <div class="area-image">
+                {{#if is_official}}
+                <img class="image" src="https://hub.docker.com/public/images/official/{{repo_name}}.png" alt="image logo">
+                {{else}}
+                <img class="image" src="images/mini-logo-white-inset.png" alt="image logo">
+                {{/if}}
+            </div>
+            <div class="area-content">
+                <h3 class="title"><a class="link" href="#">{{repo_name}}</a></h3>
+                <p class="desc"><strong>Description:</strong> {{short_description}}</p>
+            </div>
         </li>
         {{/each}}
         {{#isEmpty results}}
