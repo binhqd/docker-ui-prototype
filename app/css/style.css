@@ -87,6 +87,13 @@ body {
 .form-group {
     margin-bottom: 15px;
 }
+.form-group.inline {
+    display: flex;
+    align-items: center;
+}
+.form-group.inline .form-label {
+    margin-right: 15px;
+}
 .form-label {
     margin-bottom: 5px;
     display: block;
@@ -129,7 +136,22 @@ select.form-input {
 .radio-inline label + label {
     margin-left: 20px;
 }
+.form-fieldset {
+    border: 1px solid rgba(255,255,255,0.1);
+    padding-left: 5px;
+    padding-top: 15px;
+}
+.form-legend {
+    padding: 0 7px;
+    color: rgba(255,255,255, 0.7);
+    font-size: 13px;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.9);
+}
+.form-fieldset .form-group {
+    padding-left: 7px;
+}
 
+/* List result */
 .list-result {
     padding: 0;
     list-style: none;
@@ -138,14 +160,30 @@ select.form-input {
 .list-result .list {
     border-radius: 3px;
     border: 1px dashed #fff;
-    padding: 10px 15px;
+    padding: 10px;
     font-size: 12px;
+    display: flex;
 }
 .list-result .list:hover {
     cursor: pointer;
 }
 .list-result .list + .list {
     margin-top: 15px;
+}
+.list-result .list .area-image {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 10px;
+    width: 50px;
+}
+.list-result .list .image {
+    max-width: 100%;
+    height: auto;
+}
+.list-result .list .area-content {
+    flex: 1;
+    margin-top: -3px;
 }
 .list-result .list .link {
     color: #22b8eb;
@@ -155,7 +193,6 @@ select.form-input {
 .list-result .list .desc {
     margin-top: 10px;
 }
-
 
 /* Need to removed when dev app */
 .demo {
