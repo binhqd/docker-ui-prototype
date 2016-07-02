@@ -84,10 +84,7 @@ gulp.task('copy:misc', function() {
 });
 
 gulp.task('copy:release', ['copy:helper'], function() {
-  return gulp.src([
-    paths.src + 'node_modules/**'
-  ])
-  .pipe(gulp.dest(paths.dist + 'node_modules/'));
+  
 });
 
 gulp.task('copy:helper', function() {
