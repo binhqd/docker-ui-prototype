@@ -83,6 +83,20 @@ gulp.task('copy:misc', function() {
   .pipe(gulp.dest(paths.dist));
 });
 
+gulp.task('copy:release', ['copy:helper'], function() {
+  return gulp.src([
+    paths.src + 'node_modules/**'
+  ])
+  .pipe(gulp.dest(paths.dist + 'node_modules/'));
+});
+
+gulp.task('copy:helper', function() {
+  return gulp.src([
+    paths.src + 'helpers/**'
+  ])
+  .pipe(gulp.dest(paths.dist + 'helpers/'));
+});
+
 gulp.task('copy:images:vendor', function() {
   return gulp.src([
     './app/node_modules/vis/dist/img/**/*.{ico,png,txt}'
@@ -106,6 +120,6 @@ gulp.task('copy:js-vendor', [], function() {
     .on('error', gutil.log);
 });
 
-gulp.task('copy:dist', ['copy:images', 'copy:images:vendor', 'copy:scripts', 'copy:styles', 'copy:misc', 'copy:js-vendor'], function() {
+gulp.task('copy:dist', ['copy:images', 'copy:images:vendor', 'copy:scripts', 'copy:styles', 'copy:misc', 'copy:js-vendor', 'copy:release'], function() {
 
 });
