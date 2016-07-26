@@ -418,6 +418,7 @@ function applyDragDrop() {
             addNode(ui.helper.attr('data-tag'), {
               description: '',
               fixed: false,
+              group: 'loop',
               x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
               y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
               shape: 'circle',
@@ -585,6 +586,9 @@ function draw() {
     locales: locales,
     height: '100%',
     width: '100%',
+    groups: {
+      loop: {color:{background:'red'}, borderWidth:3}
+    },
     edges: {
       arrows: {
         to: {
