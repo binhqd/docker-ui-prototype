@@ -410,7 +410,6 @@ function applyDragDrop() {
               background: '#CA7AFF'
             }
           });
-
           break;
 
           case 'flowcontrol-loop':
@@ -599,7 +598,7 @@ function draw() {
       shadow: true,
       smooth: {
         enabled: true,
-        type: "line",
+        type: "dynamic",
         roundness: 0.5
       },
       physics: true,
@@ -652,14 +651,7 @@ function draw() {
         document.getElementById('network-popUp').style.display = 'block';
       },
       addEdge: function(data, callback) {
-        if (data.from == data.to) {
-          var r = confirm("Do you want to connect the node to itself?");
-          if (r == true) {
-            callback(data);
-          }
-        } else {
-          callback(data);
-        }
+        return addEdge(data, callback);
       }
     },
     physics: {
@@ -667,6 +659,58 @@ function draw() {
       enabled: false
     }
   };
+
+  function addEdge(linkOptions, callback) {
+    var _from, _to;
+    if (linkOptions.from != linkOptions.to) {
+      _from = findContainer(linkOptions.from);
+      _to = findContainer(linkOptions.to);
+
+      console.log(_from, _to);
+
+      if (_from.type == 'flowcontrol-condition') {
+        if (['flowcontrol-condition', 'docker-image'].indexOf(_to.type) != -1) {
+
+          if (!_from.hasTrueCondition) {
+            linkOptions.label = "True";
+            _from.hasTrueCondition = true;
+            linkOptions.smooth = {
+              enabled: true,
+              type: 'curvedCW'
+            }
+          } else {
+            linkOptions.label = "False";
+            linkOptions.smooth = {
+              enabled: true,
+              type: 'curvedCCW'
+            }
+          }
+
+          linkOptions.shadow = true;
+          linkOptions.dashes = true;
+          linkOptions.color = {
+            color: '#ff0000'
+          }
+
+          edges.add(linkOptions);
+        }
+      } else if (['docker-image', 'flowcontrol-start', 'flowcontrol-loop'].indexOf(_from.type) != -1 && _to.type == 'docker-image') {
+        if (['docker-image'].indexOf(_from.type) != -1) {
+          linkOptions.smooth = {
+            enabled: true,
+            type: 'straightCross'
+          }
+        }
+
+        edges.add(linkOptions);
+      } else if (_to.type == 'flowcontrol-condition') {
+        if (_from.type != 'docker-image') {
+          edges.add(linkOptions);
+        }
+      }
+      // callback(data);
+    }
+  }
 
   rivets.binders.input = {
     publishes: true,
@@ -716,24 +760,34 @@ function draw() {
       console.log(currentBinding);
     }
   });
+
   network.on("selectNode", function(params) {
     // if selected item is a node
-    console.log(params);
     defaultBind.showingContainerProps = true;
     if (params.nodes.length > 0) {
       var filters = findContainer(params.nodes[0]);
+
+      console.log(filters);
       if (filters.length) {
         di.selected = filters[0];
       } else {
         di.selected = null;
       }
 
-      $('#containerProps').show();
+      $('.item-props').hide();
 
-      currentBinding = rivets.bind($('#containerProps'), {
-        containerProps: di.selected
-      });
-      console.log(currentBinding);
+      switch (filters.type) {
+        case 'flowcontrol-condition':
+          $('#conditionProps').show();
+        break;
+        default:
+          $('#containerProps').show();
+
+          currentBinding = rivets.bind($('#containerProps'), {
+            containerProps: di.selected
+          });
+          break;
+      }
     }
   });
 

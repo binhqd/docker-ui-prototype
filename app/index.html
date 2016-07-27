@@ -93,7 +93,23 @@
 
             </div>
             <div class="col-right">
-                <form class="form-action" action="#" id='linkProps' onsubmit="return false;">
+              <form class="form-action item-props" style="display:none" action="#" id='conditionProps' onsubmit="return false;">
+                <div class="wrap-content">
+                  <dl class="accordion">
+                    <dt class="accordion-heading">
+                        <h4 class="title">Condition Properties</h4>
+                        <i class="icon-toggle open"></i>
+                    </dt>
+                    <dd class="accordion-content show">
+                      <div class="form-group inline">
+                        <label class="form-label" for="#">Expression:</label>
+                        <input class="form-input" type="text" name="" id="" rv-input="linkProps.name">
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </form>
+                <form class="form-action item-props" action="#" id='linkProps' onsubmit="return false;">
                   <div class="wrap-content">
                     <dl class="accordion">
                       <dt class="accordion-heading">
@@ -109,7 +125,7 @@
                     </dl>
                   </div>
                 </form>
-                <form class="form-action" action="#" id='containerProps' onsubmit="return false;">
+                <form class="form-action item-props" action="#" id='containerProps' onsubmit="return false;">
                     <div class="wrap-content">
                         <dl class="accordion">
                             <dt class="accordion-heading">
