@@ -49,7 +49,7 @@
                     <h4 class="title">Docker Images</h4>
                     <i class="icon-toggle open"></i>
                 </dt>
-                <dd class="accordion-content show">
+                <dd class="accordion-content" style="display:none">
                   <form class="form-search" action="#" onsubmit="return false;">
                       <input class="form-input" type="text" placeholder="Search for docker images..." id="txtSearchDockerImages">
                       <button class="button button-icon">
@@ -69,7 +69,7 @@
                     <h4 class="title">Workflow Controls</h4>
                     <i class="icon-toggle open"></i>
                 </dt>
-                <dd class="accordion-content show">
+                <dd class="accordion-content show" style="padding-top:0px">
                   <div id="listWorkflowControls">
                     <ul class='list-result'>
                       <li class='list' data-type="flowcontrol-start">
@@ -324,10 +324,11 @@ COPY data /data
                             </dd>
                         </dl>
                     </div>
-                    <div class="wrap-bottom">
-                        <button class="button-start" type="submit">Get started</button>
-                    </div>
+
                 </form>
+                <div class="wrap-bottom btn-getstarted">
+                    <button class="button-start" type="submit">Get started</button>
+                </div>
             </div>
         </div>
         <div class="bottom-content">

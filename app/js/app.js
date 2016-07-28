@@ -635,7 +635,7 @@ function draw() {
     },
     interaction: {
       dragView: false,
-      zoomView: false,
+      zoomView: true,
       selectConnectedEdges: false,
       dragNodes: true
     },
@@ -679,7 +679,7 @@ function draw() {
       console.log(_from, _to);
 
       if (_from.type == 'flowcontrol-condition') {
-        if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end'].indexOf(_to.type) != -1) {
+        if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
 
           if (!_from.hasTrueCondition) {
             linkOptions.label = "True";
@@ -706,7 +706,7 @@ function draw() {
           }
 
           // allow link to end if there still a path
-          if (_to.type == 'flowcontrol-end') {
+          if (['flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
             if (!_from.hasTrueCondition || !_from.hasFalseCondition || _from.allowAddLink) {
               edges.add(linkOptions);
               _from.allowAddLink = false;
