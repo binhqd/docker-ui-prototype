@@ -330,6 +330,7 @@ function sendHostCommand(cmd) {
 var defaultBind = {
   showingContainerProps: false
 };
+
 function applyDragDrop() {
   $("#listDockerImages li, #listWorkflowControls li").draggable({
     helper: "clone",
@@ -358,11 +359,12 @@ function applyDragDrop() {
             fixed: false,
             x: canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 100,
             y: canvasOffset.top - ($("#myCanvas canvas").height() / 2),
-            shape: 'circle',
+            shape: 'circularImage',
+            image: 'images/start.png',
             label: 'Start',
             type: uiType,
-            font:{
-              size:20
+            font: {
+              size: 20
             },
             color: {
               background: '#FF9900'
@@ -371,30 +373,31 @@ function applyDragDrop() {
 
           currentWorkflow.hasStartNode = true;
           break;
-          case 'flowcontrol-end':
-            if (currentWorkflow.hasEndNode) {
-              return;
+        case 'flowcontrol-end':
+          if (currentWorkflow.hasEndNode) {
+            return;
+          }
+
+          console.log('drop flowcontrol-end');
+          addNode(ui.helper.attr('data-tag'), {
+            description: '',
+            fixed: false,
+            x: canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 100,
+            y: canvasOffset.top + ($("#myCanvas canvas").height() / 2) - 300,
+            shape: 'circularImage',
+            image: 'images/exit.png',
+            label: 'End',
+            type: uiType,
+            font: {
+              size: 20
+            },
+            color: {
+              background: '#FF9900'
             }
+          });
 
-            console.log('drop flowcontrol-end');
-            addNode(ui.helper.attr('data-tag'), {
-              description: '',
-              fixed: false,
-              x: canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 100,
-              y: canvasOffset.top + ($("#myCanvas canvas").height() / 2) - 300,
-              shape: 'circle',
-              label: 'End',
-              type: uiType,
-              font:{
-                size:20
-              },
-              color: {
-                background: '#FF9900'
-              }
-            });
-
-            currentWorkflow.hasEndNode = true;
-            break;
+          currentWorkflow.hasEndNode = true;
+          break;
         case 'flowcontrol-condition':
           console.log('drop flowcontrol-condition');
           addNode(ui.helper.attr('data-tag'), {
@@ -402,7 +405,8 @@ function applyDragDrop() {
             fixed: false,
             x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
             y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
-            shape: 'diamond',
+            shape: 'image',
+            image: 'images/condition.png',
             label: 'Condition',
             type: uiType,
             size: 40,
@@ -412,26 +416,27 @@ function applyDragDrop() {
           });
           break;
 
-          case 'flowcontrol-loop':
-            console.log('drop flowcontrol-loop');
-            addNode(ui.helper.attr('data-tag'), {
-              description: '',
-              fixed: false,
-              group: 'loop',
-              x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
-              y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
-              shape: 'circle',
-              label: 'Loop',
-              type: uiType,
-              font:{
-                size:20
-              },
-              color: {
-                background: '#D1D175'
-              }
-            });
+        case 'flowcontrol-loop':
+          console.log('drop flowcontrol-loop');
+          addNode(ui.helper.attr('data-tag'), {
+            description: '',
+            fixed: false,
+            group: 'loop',
+            x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
+            y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
+            shape: 'image',
+            image: 'images/loop.png',
+            label: 'Loop',
+            type: uiType,
+            font: {
+              size: 20
+            },
+            color: {
+              background: '#D1D175'
+            }
+          });
 
-            break;
+          break;
         default:
           addNode(ui.helper.attr('data-tag'), {
             description: '',
@@ -586,7 +591,12 @@ function draw() {
     height: '100%',
     width: '100%',
     groups: {
-      loop: {color:{background:'red'}, borderWidth:3}
+      loop: {
+        color: {
+          background: 'red'
+        },
+        borderWidth: 3
+      }
     },
     edges: {
       arrows: {
@@ -669,7 +679,7 @@ function draw() {
       console.log(_from, _to);
 
       if (_from.type == 'flowcontrol-condition') {
-        if (['flowcontrol-condition', 'docker-image'].indexOf(_to.type) != -1) {
+        if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end'].indexOf(_to.type) != -1) {
 
           if (!_from.hasTrueCondition) {
             linkOptions.label = "True";
@@ -680,6 +690,9 @@ function draw() {
             }
           } else {
             linkOptions.label = "False";
+            _from.hasFalseCondition = true;
+            _from.allowAddLink = true;
+
             linkOptions.smooth = {
               enabled: true,
               type: 'curvedCCW'
@@ -692,7 +705,43 @@ function draw() {
             color: '#ff0000'
           }
 
+          // allow link to end if there still a path
+          if (_to.type == 'flowcontrol-end') {
+            if (!_from.hasTrueCondition || !_from.hasFalseCondition || _from.allowAddLink) {
+              edges.add(linkOptions);
+              _from.allowAddLink = false;
+            }
+          } else {
+            edges.add(linkOptions);
+          }
+
+          if (_from.allowAddLink) {
+            _from.allowAddLink = false;
+          }
+        }
+      } else if (['flowcontrol-loop'].indexOf(_from.type) != -1) {
+        if (['docker-image', 'flowcontrol-condition'].indexOf(_to.type) != -1) {
+          linkOptions.shadow = true;
+          linkOptions.dashes = true;
+          linkOptions.color = {
+            color: '#00ff00'
+          }
+          linkOptions.smooth = {
+            enabled: true,
+            type: 'curvedCCW'
+          }
+
           edges.add(linkOptions);
+
+          // add rotate back
+          var linkOptionsCW = $.extend({}, linkOptions);
+          delete linkOptionsCW.id;
+          var tmp = linkOptionsCW.to;
+          linkOptionsCW.to = linkOptionsCW.from;
+          linkOptionsCW.from = tmp;
+          edges.add(linkOptionsCW);
+
+          _from.allow = false;
         }
       } else if (['docker-image', 'flowcontrol-start', 'flowcontrol-loop'].indexOf(_from.type) != -1 && _to.type == 'docker-image') {
         if (['docker-image'].indexOf(_from.type) != -1) {
@@ -703,10 +752,20 @@ function draw() {
         }
 
         edges.add(linkOptions);
-      } else if (_to.type == 'flowcontrol-condition') {
+      } else if (['flowcontrol-condition', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
         if (_from.type != 'docker-image') {
           edges.add(linkOptions);
+        } else {
+          edges.add(linkOptions);
         }
+      } else if (['flowcontrol-end'].indexOf(_to.type) != -1) {
+
+        // not allow loop to exit
+        if (['flowcontrol-loop'].indexOf(_from.type) == -1) {
+          edges.add(linkOptions);
+        }
+      } else {
+        edges.add(linkOptions);
       }
       // callback(data);
     }
@@ -779,7 +838,7 @@ function draw() {
       switch (filters.type) {
         case 'flowcontrol-condition':
           $('#conditionProps').show();
-        break;
+          break;
         default:
           $('#containerProps').show();
 

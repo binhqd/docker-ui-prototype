@@ -1,7 +1,7 @@
 'use strict';
 
 var gulp = require('gulp'),
-inject = require('gulp-inject');
+  inject = require('gulp-inject');
 
 var paths = gulp.paths;
 
@@ -41,5 +41,5 @@ gulp.task('inject', function() {
       starttag: '<!-- inject:app:{{ext}} -->',
     }))
 
-    .pipe(gulp.dest(paths.dist));
+  .pipe(gulp.dest(paths.dist));
 });
