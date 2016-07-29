@@ -5,4 +5,5 @@ function Container(props) {
   _this.tag = props.tag;
   _this.type = 'Container';
   _this.description = props.description;
+  _this.props = props;
 }

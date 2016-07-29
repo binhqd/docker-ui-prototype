@@ -52,8 +52,8 @@ gulp.task('copy:styles:app', function() {
     }))
     // .pipe(ngAnnotate())
     // .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
     .pipe(rev())
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.dist + 'css/'))
     .on('error', gutil.log);
 });
@@ -67,8 +67,8 @@ gulp.task('copy:styles:vendor', function() {
     }))
     // .pipe(ngAnnotate())
     // .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
     .pipe(rev())
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.dist + 'css/'))
     .on('error', gutil.log);
 });
@@ -111,7 +111,7 @@ gulp.task('copy:js-vendor', [], function() {
     // .pipe(uglify())
     .pipe(rev())
 
-  .pipe(sourcemaps.write('.'))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.dist + 'js/'))
     .on('error', gutil.log);
 });

@@ -8,9 +8,8 @@ var di = {
   selected: null,
   showContainerProps: false
 };
-var currentWorkflow = {
 
-}
+var loopDataContainer = {};
 
 
 var searchTimeout;
@@ -71,17 +70,27 @@ $(document).ready(function() {
   });
 
   // Accordion
-  $('.accordion .accordion-heading:first-child').next().show();
+  $('.accordion .accordion-heading.show').next().show();
 
   $('.accordion .accordion-heading').click(function() {
     var $this = $(this);
-    if ($this.next().hasClass('show')) {
-      $this.find('.icon-toggle').removeClass('open');
-      $this.next().removeClass('show');
-      $this.next().slideUp(350);
-    } else {
+    var isShowing = false;
+
+    if ($this.hasClass('show')) {
+      isShowing = true;
+    }
+
+    var allAccordion = $this.parent().parent().find('.accordion-heading.show').each(function(index, elem) {
+      if ($this != $(elem)) {
+        $(elem).removeClass('show');
+        $(elem).next().slideUp(350);
+        $(elem).find('.icon-toggle').removeClass('open');
+      }
+    });
+
+    if (!isShowing) {
       $this.find('.icon-toggle').addClass('open');
-      $this.next().addClass('show');
+      $this.addClass('show');
       $this.next().slideDown(350);
     }
   });
@@ -272,8 +281,11 @@ $(document).ready(function() {
 
 var cmdHistory = [];
 
-function isContainerExisted(idOrName) {
-  for (var key in nodes._data) {
+function isContainerExisted(idOrName, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+  for (var key in dataContainer['nodes']._data) {
     if (key == idOrName) {
       return true;
     }
@@ -331,34 +343,29 @@ var defaultBind = {
   showingContainerProps: false
 };
 
-function applyDragDrop() {
-  $("#listDockerImages li, #listWorkflowControls li").draggable({
-    helper: "clone",
-    start: function(e, ui) {
-      $(ui.helper).addClass("imageDraggableHelper");
-    }
-  });
-
-  $("#myCanvas").droppable({
+function setupDroppable(canvas, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+  canvas.droppable({
     tolerance: 'pointer',
     drop: function(event, ui) {
-      console.log(event, ui);
+      event.preventDefault();
 
       var uiType = ui.draggable.attr('data-type');
-      var canvasOffset = $("#myCanvas canvas").offset();
+      var canvasOffset = canvas.find("canvas").offset();
 
       switch (uiType) {
         case 'flowcontrol-start':
-          if (currentWorkflow.hasStartNode) {
+          if (dataContainer['currentWorkflow'].hasStartNode) {
             return;
           }
 
-          console.log('drop flowcontrol-start');
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 100,
-            y: canvasOffset.top - ($("#myCanvas canvas").height() / 2),
+            x: canvasOffset.left - (canvas.find("canvas").width() / 2) + 100,
+            y: canvasOffset.top - (canvas.find("canvas").height() / 2),
             shape: 'circularImage',
             image: 'images/start.png',
             label: 'Start',
@@ -369,12 +376,12 @@ function applyDragDrop() {
             color: {
               background: '#FF9900'
             }
-          });
+          }, dataContainer);
 
-          currentWorkflow.hasStartNode = true;
+          dataContainer['currentWorkflow'].hasStartNode = true;
           break;
         case 'flowcontrol-end':
-          if (currentWorkflow.hasEndNode) {
+          if (dataContainer['currentWorkflow'].hasEndNode) {
             return;
           }
 
@@ -382,8 +389,8 @@ function applyDragDrop() {
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 100,
-            y: canvasOffset.top + ($("#myCanvas canvas").height() / 2) - 300,
+            x: canvasOffset.left - (canvas.find("canvas").width() / 2) + 100,
+            y: canvasOffset.top + (canvas.find("canvas").height() / 2) - 300,
             shape: 'circularImage',
             image: 'images/exit.png',
             label: 'End',
@@ -394,17 +401,16 @@ function applyDragDrop() {
             color: {
               background: '#FF9900'
             }
-          });
+          }, dataContainer);
 
-          currentWorkflow.hasEndNode = true;
+          dataContainer['currentWorkflow'].hasEndNode = true;
           break;
         case 'flowcontrol-condition':
-          console.log('drop flowcontrol-condition');
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
+            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
+            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
             shape: 'image',
             image: 'images/condition.png',
             label: 'Condition',
@@ -413,17 +419,16 @@ function applyDragDrop() {
             color: {
               background: '#CA7AFF'
             }
-          });
+          }, dataContainer);
           break;
 
         case 'flowcontrol-loop':
-          console.log('drop flowcontrol-loop');
-          addNode(ui.helper.attr('data-tag'), {
+          var options = {
             description: '',
             fixed: false,
             group: 'loop',
-            x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
+            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
+            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
             shape: 'image',
             image: 'images/loop.png',
             label: 'Loop',
@@ -434,19 +439,37 @@ function applyDragDrop() {
             color: {
               background: '#D1D175'
             }
-          });
+          };
+          var container = addNode(ui.helper.attr('data-tag'), options, dataContainer);
 
+          $('#popupLoops').append($('<div class="dialog-workflow" id="popup-workflow-loop-' + container.id + '"><div class="loop-canvas"></div></div>'));
+          loopDataContainer['data-' + container.id] = initDataContainer();
+
+          draw('#popup-workflow-loop-' + container.id + ' .loop-canvas', {}, loopDataContainer['data-' + container.id]);
+
+          setupDroppable($('#popup-workflow-loop-' + container.id + ' .loop-canvas'), loopDataContainer['data-' + container.id]);
           break;
         default:
           addNode(ui.helper.attr('data-tag'), {
             description: '',
-            x: ui.offset.left - canvasOffset.left - ($("#myCanvas canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - ($("#myCanvas canvas").height() / 2) + 50,
+            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
+            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
             type: 'docker-image'
-          });
+          }, dataContainer);
       }
     }
   });
+}
+
+function applyDragDrop() {
+  $("#listDockerImages li, #listWorkflowControls li").draggable({
+    helper: "clone",
+    start: function(e, ui) {
+      $(ui.helper).addClass("imageDraggableHelper");
+    }
+  });
+
+  setupDroppable($("#myCanvas"), window);
 
   $('#containerProps').hide();
   $('#linkProps').hide();
@@ -459,20 +482,27 @@ var nodesData = [],
   edgesData = [];
 var seed = 2;
 
-function destroy() {
-  if (network !== null) {
-    network.destroy();
-    network = null;
+function destroy(dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+
+  if (dataContainer['network'] !== null) {
+    dataContainer['network'].destroy();
+    dataContainer['network'] = null;
   }
 }
 
-function getNextId() {
+function getNextId(dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
   var id = 0;
-  for (var key in nodes._data) {
+  for (var key in dataContainer['nodes']._data) {
     if (id === 0) {
-      id = parseInt(nodes._data[key].id);
+      id = parseInt(dataContainer['nodes']._data[key].id);
     } else {
-      var _currentID = parseInt(nodes._data[key].id);
+      var _currentID = parseInt(dataContainer['nodes']._data[key].id);
       if (_currentID > id) {
         id = _currentID;
       }
@@ -482,11 +512,14 @@ function getNextId() {
   return ++id;
 }
 
-function linkContainers(srcID, desId) {
+function linkContainers(srcID, desId, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
   // check if id1 && id2 has existed
-  if (!isContainerExisted(srcID)) {
+  if (!isContainerExisted(srcID, dataContainer)) {
     CommandLogger.containerNotExist(srcID);
-  } else if (!isContainerExisted(desId)) {
+  } else if (!isContainerExisted(desId, dataContainer)) {
     CommandLogger.containerNotExist(desId);
   } else {
     edges.add({
@@ -496,7 +529,11 @@ function linkContainers(srcID, desId) {
   }
 }
 
-function addNode(label, options) {
+function addNode(label, options, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+
   var id = getNextId();
   try {
     var _defaultOptions = {
@@ -515,7 +552,7 @@ function addNode(label, options) {
       buildCpu: ''
     };
 
-    var container = $.extend(_defaultOptions, options);
+    var containerOptions = $.extend(_defaultOptions, options);
     // if (!isNaN(options.x)) {
     //   container.x = options.x;
     // }
@@ -523,46 +560,173 @@ function addNode(label, options) {
     //   container.y = options.y;
     // }
 
-    nodes.add(container);
+    dataContainer['nodes'].add(containerOptions);
+    var container = new Container(containerOptions);
+    hashContainers.push(container);
 
-    hashContainers.push(new Container(container));
+    return container;
   } catch (err) {
     alert(err);
   }
 }
 
-function findContainer(id) {
-  for (var i in nodes._data) {
-    if (nodes._data[i].id == id) {
-      return nodes._data[i];
+function findContainer(id, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+
+  for (var i in dataContainer['nodes']._data) {
+    if (dataContainer['nodes']._data[i].id == id) {
+      return dataContainer['nodes']._data[i];
     }
   }
   return null;
 }
 
 function findLink(id) {
-  for (var i in edges._data) {
-    if (edges._data[i].id == id) {
-      return edges._data[i];
+  for (var i in dataContainer['edges']._data) {
+    if (dataContainer['edges']._data[i].id == id) {
+      return dataContainer['edges']._data[i];
     }
   }
   return null;
 }
 
-function draw() {
-  destroy();
-  nodes = new vis.DataSet();
-  edges = new vis.DataSet();
+function addEdge(linkOptions, callback, dataContainer) {
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+  var _from, _to;
+  if (linkOptions.from != linkOptions.to) {
+    _from = findContainer(linkOptions.from, dataContainer);
+    _to = findContainer(linkOptions.to, dataContainer);
 
-  nodes.add(nodesData);
-  edges.add(edgesData);
-  var data = {
-    nodes: nodes,
-    edges: edges
+    console.log(_from, _to);
+
+    if (_from.type == 'flowcontrol-condition') {
+      if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
+
+        if (!_from.hasTrueCondition) {
+          linkOptions.label = "True";
+          _from.hasTrueCondition = true;
+          linkOptions.smooth = {
+            enabled: true,
+            type: 'curvedCW'
+          }
+        } else {
+          linkOptions.label = "False";
+          _from.hasFalseCondition = true;
+          _from.allowAddLink = true;
+
+          linkOptions.smooth = {
+            enabled: true,
+            type: 'curvedCCW'
+          }
+        }
+
+        linkOptions.shadow = true;
+        linkOptions.dashes = true;
+        linkOptions.color = {
+          color: '#ff0000'
+        }
+
+        // allow link to end if there still a path
+        if (['flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
+          if (!_from.hasTrueCondition || !_from.hasFalseCondition || _from.allowAddLink) {
+            edges.add(linkOptions);
+            _from.allowAddLink = false;
+          }
+        } else {
+          edges.add(linkOptions);
+        }
+
+        if (_from.allowAddLink) {
+          _from.allowAddLink = false;
+        }
+      }
+    } else if (['flowcontrol-loop'].indexOf(_from.type) != -1) {
+      if (['docker-image', 'flowcontrol-condition'].indexOf(_to.type) != -1) {
+        linkOptions.shadow = true;
+        linkOptions.dashes = true;
+        linkOptions.color = {
+          color: '#00ff00'
+        }
+        linkOptions.smooth = {
+          enabled: true,
+          type: 'curvedCCW'
+        }
+
+        edges.add(linkOptions);
+
+        // add rotate back
+        var linkOptionsCW = $.extend({}, linkOptions);
+        delete linkOptionsCW.id;
+        var tmp = linkOptionsCW.to;
+        linkOptionsCW.to = linkOptionsCW.from;
+        linkOptionsCW.from = tmp;
+        edges.add(linkOptionsCW);
+
+        _from.allow = false;
+      }
+    } else if (['docker-image', 'flowcontrol-start', 'flowcontrol-loop'].indexOf(_from.type) != -1 && _to.type == 'docker-image') {
+      if (['docker-image'].indexOf(_from.type) != -1) {
+        linkOptions.smooth = {
+          enabled: true,
+          type: 'straightCross'
+        }
+      }
+
+      edges.add(linkOptions);
+    } else if (['flowcontrol-condition', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
+      if (_from.type != 'docker-image') {
+        edges.add(linkOptions);
+      } else {
+        edges.add(linkOptions);
+      }
+    } else if (['flowcontrol-end'].indexOf(_to.type) != -1) {
+
+      // not allow loop to exit
+      if (['flowcontrol-loop'].indexOf(_from.type) == -1) {
+        edges.add(linkOptions);
+      }
+    } else {
+      edges.add(linkOptions);
+    }
+    // callback(data);
+  }
+}
+
+function initDataContainer(container) {
+  if (!container) {
+    container = window;
+  }
+
+  container.currentWorkflow = {
+    hasEndNode: false,
+    hasStartNode: false
+  }
+
+  return container;
+}
+
+function draw(selector, options, dataContainer) {
+  var canvas = $(selector);
+
+  if (!dataContainer) {
+    dataContainer = window;
+  }
+
+  // destroy(dataContainer);
+  dataContainer['nodes'] = new vis.DataSet();
+  dataContainer['edges'] = new vis.DataSet();
+
+  dataContainer['data'] = {
+    nodes: dataContainer['nodes'],
+    edges: dataContainer['edges']
   };
 
   // create a network
-  var container = document.getElementById('myCanvas');
+  dataContainer['container'] = canvas[0];
 
   var locales = {
     en: {
@@ -582,7 +746,7 @@ function draw() {
     }
   }
 
-  var options = {
+  var _defaultOptions = {
     layout: {
       randomSeed: seed
     }, // just to make sure the layout is the same when the locale is changed
@@ -661,7 +825,7 @@ function draw() {
         document.getElementById('network-popUp').style.display = 'block';
       },
       addEdge: function(data, callback) {
-        return addEdge(data, callback);
+        return addEdge(data, callback, dataContainer);
       }
     },
     physics: {
@@ -670,106 +834,7 @@ function draw() {
     }
   };
 
-  function addEdge(linkOptions, callback) {
-    var _from, _to;
-    if (linkOptions.from != linkOptions.to) {
-      _from = findContainer(linkOptions.from);
-      _to = findContainer(linkOptions.to);
-
-      console.log(_from, _to);
-
-      if (_from.type == 'flowcontrol-condition') {
-        if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
-
-          if (!_from.hasTrueCondition) {
-            linkOptions.label = "True";
-            _from.hasTrueCondition = true;
-            linkOptions.smooth = {
-              enabled: true,
-              type: 'curvedCW'
-            }
-          } else {
-            linkOptions.label = "False";
-            _from.hasFalseCondition = true;
-            _from.allowAddLink = true;
-
-            linkOptions.smooth = {
-              enabled: true,
-              type: 'curvedCCW'
-            }
-          }
-
-          linkOptions.shadow = true;
-          linkOptions.dashes = true;
-          linkOptions.color = {
-            color: '#ff0000'
-          }
-
-          // allow link to end if there still a path
-          if (['flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
-            if (!_from.hasTrueCondition || !_from.hasFalseCondition || _from.allowAddLink) {
-              edges.add(linkOptions);
-              _from.allowAddLink = false;
-            }
-          } else {
-            edges.add(linkOptions);
-          }
-
-          if (_from.allowAddLink) {
-            _from.allowAddLink = false;
-          }
-        }
-      } else if (['flowcontrol-loop'].indexOf(_from.type) != -1) {
-        if (['docker-image', 'flowcontrol-condition'].indexOf(_to.type) != -1) {
-          linkOptions.shadow = true;
-          linkOptions.dashes = true;
-          linkOptions.color = {
-            color: '#00ff00'
-          }
-          linkOptions.smooth = {
-            enabled: true,
-            type: 'curvedCCW'
-          }
-
-          edges.add(linkOptions);
-
-          // add rotate back
-          var linkOptionsCW = $.extend({}, linkOptions);
-          delete linkOptionsCW.id;
-          var tmp = linkOptionsCW.to;
-          linkOptionsCW.to = linkOptionsCW.from;
-          linkOptionsCW.from = tmp;
-          edges.add(linkOptionsCW);
-
-          _from.allow = false;
-        }
-      } else if (['docker-image', 'flowcontrol-start', 'flowcontrol-loop'].indexOf(_from.type) != -1 && _to.type == 'docker-image') {
-        if (['docker-image'].indexOf(_from.type) != -1) {
-          linkOptions.smooth = {
-            enabled: true,
-            type: 'straightCross'
-          }
-        }
-
-        edges.add(linkOptions);
-      } else if (['flowcontrol-condition', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
-        if (_from.type != 'docker-image') {
-          edges.add(linkOptions);
-        } else {
-          edges.add(linkOptions);
-        }
-      } else if (['flowcontrol-end'].indexOf(_to.type) != -1) {
-
-        // not allow loop to exit
-        if (['flowcontrol-loop'].indexOf(_from.type) == -1) {
-          edges.add(linkOptions);
-        }
-      } else {
-        edges.add(linkOptions);
-      }
-      // callback(data);
-    }
-  }
+  var options = $.extend(_defaultOptions, options);
 
   rivets.binders.input = {
     publishes: true,
@@ -782,17 +847,17 @@ function draw() {
     }
   };
 
-  network = new vis.Network(container, data, options);
+  dataContainer['network'] = new vis.Network(dataContainer['container'], dataContainer['data'], options);
 
-  network.on('release', function(a, b, c, d) {
+  dataContainer['network'].on('release', function(a, b, c, d) {
     console.log(a, b, c, d);
   });
 
   var currentBinding = null;
   var currentLinkBinding = null;
 
-  network.on("deselectEdge", function(params) {
-    di.selected = null;
+  dataContainer['network'].on("deselectEdge", function(params) {
+    dataContainer['di'].selected = null;
     $('#linkProps').hide();
     if (currentLinkBinding) {
       currentLinkBinding.unbind();
@@ -802,40 +867,66 @@ function draw() {
       // TODO: Disable property inputs
     }
   });
-  network.on("selectEdge", function(params) {
+
+  dataContainer['network'].on("selectEdge", function(params) {
     if (params.edges.length > 0) {
       var filters = findLink(params.edges[0]);
       if (filters.length) {
-        di.selectedLink = filters[0];
+        dataContainer['di'].selectedLink = filters[0];
       } else {
-        di.selectedLink = null;
+        dataContainer['di'].selectedLink = null;
       }
 
       $('#linkProps').show();
 
       currentLinkBinding = rivets.bind($('#linkProps'), {
-        linkProps: di.selectedLink
+        linkProps: dataContainer['di'].selectedLink
       });
       console.log(currentBinding);
     }
   });
 
-  network.on("selectNode", function(params) {
+  dataContainer['network'].on("doubleClick", function(params) {
+    if (params.nodes.length > 0) {
+      var selectedNode = findContainer(params.nodes[0], dataContainer);
+      if (!selectedNode) {
+        return;
+      }
+
+      console.log('Double click on: ', selectedNode);
+
+      if (selectedNode.type == 'flowcontrol-loop') {
+        $("#popup-workflow-loop-" + selectedNode.id).dialog({
+          position: {
+            my: "center",
+            at: "center",
+            of: window
+          },
+          draggable: false,
+          resizable: false,
+          width: '760',
+          height: '600',
+          title: 'Workflow for the loop'
+        });
+      }
+    }
+  });
+  dataContainer['network'].on("selectNode", function(params) {
     // if selected item is a node
     defaultBind.showingContainerProps = true;
     if (params.nodes.length > 0) {
-      var filters = findContainer(params.nodes[0]);
+      var node = findContainer(params.nodes[0], dataContainer);
 
-      console.log(filters);
-      if (filters.length) {
-        di.selected = filters[0];
+      console.log(node);
+      if (node) {
+        dataContainer['di'].selected = node;
       } else {
-        di.selected = null;
+        dataContainer['di'].selected = null;
       }
 
       $('.item-props').hide();
 
-      switch (filters.type) {
+      switch (node.type) {
         case 'flowcontrol-condition':
           $('#conditionProps').show();
           break;
@@ -843,15 +934,15 @@ function draw() {
           $('#containerProps').show();
 
           currentBinding = rivets.bind($('#containerProps'), {
-            containerProps: di.selected
+            containerProps: dataContainer['di'].selected
           });
           break;
       }
     }
   });
 
-  network.on("deselectNode", function(params) {
-    di.selected = null;
+  dataContainer['network'].on("deselectNode", function(params) {
+    dataContainer['di'].selected = null;
     $('#containerProps').hide();
     if (currentBinding) {
       currentBinding.unbind();
@@ -860,6 +951,7 @@ function draw() {
       // TODO: Disable property inputs
     }
   });
+
 }
 
 function clearPopUp() {

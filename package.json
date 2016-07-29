@@ -41,6 +41,7 @@
     "install-native": "node ./tasks/install_native_module"
   },
   "dependencies": {
-    "fs-jetpack": "^0.9.2"
+    "fs-jetpack": "^0.9.2",
+    "jquery": "^1.11.3"
   }
 }

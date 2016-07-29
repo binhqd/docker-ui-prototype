@@ -257,7 +257,7 @@ select.form-input {
 
 .bottom-content {
   min-height: 50px;
-  height: 150px;
+  height: 90px;
   background-color: #222222;
   position: relative;
   top: auto !important;
@@ -377,4 +377,12 @@ select.form-input {
   z-index: 1000;
   width: 232px;
   right: 11px;
+}
+
+.ui-draggable {
+  z-index: 101;
+}
+
+.loop-canvas {
+  height: 100%;
 }
