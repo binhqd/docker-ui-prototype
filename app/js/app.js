@@ -443,7 +443,7 @@ function setupDroppable(canvas, dataContainer) {
           var container = addNode(ui.helper.attr('data-tag'), options, dataContainer);
 
           $('#popupLoops').append($('<div class="dialog-workflow" id="popup-workflow-loop-' + container.id + '"><div class="loop-canvas"></div></div>'));
-          loopDataContainer['data-' + container.id] = initDataContainer();
+          loopDataContainer['data-' + container.id] = initDataContainer({});
 
           draw('#popup-workflow-loop-' + container.id + ' .loop-canvas', {}, loopDataContainer['data-' + container.id]);
 
@@ -534,7 +534,7 @@ function addNode(label, options, dataContainer) {
     dataContainer = window;
   }
 
-  var id = getNextId();
+  var id = getNextId(dataContainer);
   try {
     var _defaultOptions = {
       id: id,
