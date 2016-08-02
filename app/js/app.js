@@ -4,6 +4,9 @@ var connectionCount = [];
 var network = null;
 var template;
 var hashContainers = [];
+var currentDataContainer = [];
+currentDataContainer.push(window);
+
 var di = {
   selected: null,
   showContainerProps: false
@@ -347,13 +350,20 @@ function setupDroppable(canvas, dataContainer) {
   if (!dataContainer) {
     dataContainer = window;
   }
+
   canvas.droppable({
     tolerance: 'pointer',
     drop: function(event, ui) {
+      if (currentDataContainer[currentDataContainer.length - 1] !== dataContainer) {
+        return;
+      }
       event.preventDefault();
 
       var uiType = ui.draggable.attr('data-type');
       var canvasOffset = canvas.find("canvas").offset();
+
+      var canvasPosition = dataContainer['network'].getViewPosition();
+      var currentScale = dataContainer['network'].getScale();
 
       switch (uiType) {
         case 'flowcontrol-start':
@@ -364,8 +374,8 @@ function setupDroppable(canvas, dataContainer) {
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: canvasOffset.left - (canvas.find("canvas").width() / 2) + 100,
-            y: canvasOffset.top - (canvas.find("canvas").height() / 2),
+            x: (ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+            y: (ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
             shape: 'circularImage',
             image: 'images/start.png',
             label: 'Start',
@@ -389,8 +399,8 @@ function setupDroppable(canvas, dataContainer) {
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: canvasOffset.left - (canvas.find("canvas").width() / 2) + 100,
-            y: canvasOffset.top + (canvas.find("canvas").height() / 2) - 300,
+            x: (ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+            y: (ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
             shape: 'circularImage',
             image: 'images/exit.png',
             label: 'End',
@@ -409,8 +419,8 @@ function setupDroppable(canvas, dataContainer) {
           addNode(ui.helper.attr('data-tag'), {
             description: '',
             fixed: false,
-            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
+            x: (ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+            y: (ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
             shape: 'image',
             image: 'images/condition.png',
             label: 'Condition',
@@ -427,8 +437,8 @@ function setupDroppable(canvas, dataContainer) {
             description: '',
             fixed: false,
             group: 'loop',
-            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
+            x: (ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+            y: (ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
             shape: 'image',
             image: 'images/loop.png',
             label: 'Loop',
@@ -452,8 +462,8 @@ function setupDroppable(canvas, dataContainer) {
         default:
           addNode(ui.helper.attr('data-tag'), {
             description: '',
-            x: ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150,
-            y: ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50,
+            x: (ui.offset.left - canvasOffset.left - (canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+            y: (ui.offset.top - canvasOffset.top - (canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
             type: 'docker-image'
           }, dataContainer);
       }
@@ -562,7 +572,7 @@ function addNode(label, options, dataContainer) {
 
     dataContainer['nodes'].add(containerOptions);
     var container = new Container(containerOptions);
-    hashContainers.push(container);
+    dataContainer['hashContainers'].push(container);
 
     return container;
   } catch (err) {
@@ -706,6 +716,8 @@ function initDataContainer(container) {
     hasStartNode: false
   }
 
+  container['hashContainers'] = [];
+
   return container;
 }
 
@@ -719,6 +731,27 @@ function draw(selector, options, dataContainer) {
   // destroy(dataContainer);
   dataContainer['nodes'] = new vis.DataSet();
   dataContainer['edges'] = new vis.DataSet();
+
+  if (!dataContainer.document) {
+    addNode('Loop Start', {
+      description: '',
+      fixed: false,
+      x: 200,
+      y: 50,
+      shape: 'circularImage',
+      image: 'images/start.png',
+      label: 'Loop Start',
+      type: 'flowcontrol-start',
+      font: {
+        size: 20
+      },
+      color: {
+        background: '#FF9900'
+      }
+    }, dataContainer);
+
+    dataContainer['currentWorkflow'].hasStartNode = true;
+  }
 
   dataContainer['data'] = {
     nodes: dataContainer['nodes'],
@@ -798,7 +831,7 @@ function draw(selector, options, dataContainer) {
       selectionWidth: 4
     },
     interaction: {
-      dragView: false,
+      dragView: true,
       zoomView: true,
       selectConnectedEdges: false,
       dragNodes: true
@@ -849,6 +882,13 @@ function draw(selector, options, dataContainer) {
 
   dataContainer['network'] = new vis.Network(dataContainer['container'], dataContainer['data'], options);
 
+  dataContainer['network'].moveTo({
+    position: {
+      x: 0,
+      y: 0
+    },
+    scale: 1
+  });
   dataContainer['network'].on('release', function(a, b, c, d) {
     console.log(a, b, c, d);
   });
@@ -887,26 +927,39 @@ function draw(selector, options, dataContainer) {
   });
 
   dataContainer['network'].on("doubleClick", function(params) {
+
     if (params.nodes.length > 0) {
       var selectedNode = findContainer(params.nodes[0], dataContainer);
       if (!selectedNode) {
         return;
       }
 
+      currentDataContainer.push(loopDataContainer['data-' + selectedNode.id]);
+
       console.log('Double click on: ', selectedNode);
 
       if (selectedNode.type == 'flowcontrol-loop') {
         $("#popup-workflow-loop-" + selectedNode.id).dialog({
           position: {
-            my: "center",
-            at: "center",
-            of: window
+            collision: "fit flip",
+            of: '#myCanvas'
           },
           draggable: false,
           resizable: false,
-          width: '760',
-          height: '600',
-          title: 'Workflow for the loop'
+          width: $('#myCanvas').outerWidth(),
+          height: $('#myCanvas').height(),
+          title: 'Workflow for the loop',
+
+          close: function(event, ui) {
+            currentDataContainer.pop();
+          }
+        });
+
+        loopDataContainer['data-' + selectedNode.id]['network'].moveTo({
+          position: {
+            x: 0,
+            y: 0
+          }
         });
       }
     }
