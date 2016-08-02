@@ -381,7 +381,7 @@ function setupDroppable(canvas, dataContainer) {
             label: 'Start',
             type: uiType,
             font: {
-              size: 20
+              size: 13
             },
             color: {
               background: '#FF9900'
@@ -406,7 +406,7 @@ function setupDroppable(canvas, dataContainer) {
             label: 'End',
             type: uiType,
             font: {
-              size: 20
+              size: 13
             },
             color: {
               background: '#FF9900'
@@ -425,7 +425,9 @@ function setupDroppable(canvas, dataContainer) {
             image: 'images/condition.png',
             label: 'Condition',
             type: uiType,
-            size: 40,
+            font: {
+              size: 13
+            },
             color: {
               background: '#CA7AFF'
             }
@@ -444,7 +446,7 @@ function setupDroppable(canvas, dataContainer) {
             label: 'Loop',
             type: uiType,
             font: {
-              size: 20
+              size: 13
             },
             color: {
               background: '#D1D175'
@@ -532,7 +534,7 @@ function linkContainers(srcID, desId, dataContainer) {
   } else if (!isContainerExisted(desId, dataContainer)) {
     CommandLogger.containerNotExist(desId);
   } else {
-    edges.add({
+    dataContainer['edges'].add({
       from: srcID,
       to: desId
     });
@@ -643,11 +645,11 @@ function addEdge(linkOptions, callback, dataContainer) {
         // allow link to end if there still a path
         if (['flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
           if (!_from.hasTrueCondition || !_from.hasFalseCondition || _from.allowAddLink) {
-            edges.add(linkOptions);
+            dataContainer['edges'].add(linkOptions);
             _from.allowAddLink = false;
           }
         } else {
-          edges.add(linkOptions);
+          dataContainer['edges'].add(linkOptions);
         }
 
         if (_from.allowAddLink) {
@@ -666,7 +668,7 @@ function addEdge(linkOptions, callback, dataContainer) {
           type: 'curvedCCW'
         }
 
-        edges.add(linkOptions);
+        dataContainer['edges'].add(linkOptions);
 
         // add rotate back
         var linkOptionsCW = $.extend({}, linkOptions);
@@ -674,7 +676,7 @@ function addEdge(linkOptions, callback, dataContainer) {
         var tmp = linkOptionsCW.to;
         linkOptionsCW.to = linkOptionsCW.from;
         linkOptionsCW.from = tmp;
-        edges.add(linkOptionsCW);
+        dataContainer['edges'].add(linkOptionsCW);
 
         _from.allow = false;
       }
@@ -686,21 +688,21 @@ function addEdge(linkOptions, callback, dataContainer) {
         }
       }
 
-      edges.add(linkOptions);
+      dataContainer['edges'].add(linkOptions);
     } else if (['flowcontrol-condition', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
       if (_from.type != 'docker-image') {
-        edges.add(linkOptions);
+        dataContainer['edges'].add(linkOptions);
       } else {
-        edges.add(linkOptions);
+        dataContainer['edges'].add(linkOptions);
       }
     } else if (['flowcontrol-end'].indexOf(_to.type) != -1) {
 
       // not allow loop to exit
       if (['flowcontrol-loop'].indexOf(_from.type) == -1) {
-        edges.add(linkOptions);
+        dataContainer['edges'].add(linkOptions);
       }
     } else {
-      edges.add(linkOptions);
+      dataContainer['edges'].add(linkOptions);
     }
     // callback(data);
   }
@@ -733,11 +735,15 @@ function draw(selector, options, dataContainer) {
   dataContainer['edges'] = new vis.DataSet();
 
   if (!dataContainer.document) {
-    addNode('Loop Start', {
+    // var canvasPosition = dataContainer['network'].getViewPosition();
+
+    var node = addNode('Loop Start', {
       description: '',
       fixed: false,
-      x: 200,
-      y: 50,
+      //x: ((canvas.find("canvas").width() / 2) + 150 + canvasPosition.x) / currentScale,
+      //y: ((canvas.find("canvas").height() / 2) + 50 + canvasPosition.y) / currentScale,
+      x: 0,
+      y: 0,
       shape: 'circularImage',
       image: 'images/start.png',
       label: 'Loop Start',
