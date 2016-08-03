@@ -49,69 +49,80 @@
     </div>
     <div class="main-content">
       <div class="col-left">
-        <dl class="accordion">
-          <dt class="accordion-heading show">
-                    <h4 class="title">Workflow Controls</h4>
-                    <i class="icon-toggle"></i>
-                </dt>
-          <dd class="accordion-content" style="padding-top:0px">
-            <div id="listWorkflowControls">
-              <ul class='list-result'>
-                <li class='list' data-type="flowcontrol-start">
-                  <div class="area-image">
-                    <img class="image" src="images/start.png" alt="image logo">
-                  </div>
-                  <div class='area-content'>
-                    <h3 class="title"><a class="link" href="#">Start</a></h3>
-                  </div>
-                </li>
-                <li class='list' data-type="flowcontrol-end">
-                  <div class="area-image">
-                    <img class="image" src="images/exit.png" alt="image logo">
-                  </div>
-                  <div class='area-content'>
-                    <h3 class="title"><a class="link" href="#">Exit</a></h3>
-                  </div>
-                </li>
-                <li class='list' data-type="flowcontrol-condition">
-                  <div class="area-image">
-                    <img class="image" src="images/condition-white.png" alt="image logo">
-                  </div>
-                  <div class='area-content'>
-                    <h3 class="title"><a class="link" href="#">Condition</a></h3>
-                  </div>
-                </li>
-                <li class='list' data-type="flowcontrol-loop">
-                  <div class="area-image">
-                    <img class="image" src="images/loop-white.png" alt="image logo">
-                  </div>
-                  <div class='area-content'>
-                    <h3 class="title"><a class="link" href="#">Loop</a></h3>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </dd>
-        </dl>
-        <dl class="accordion">
-          <dt class="accordion-heading">
-                    <h4 class="title">Docker Images</h4>
-                    <i class="icon-toggle"></i>
-                </dt>
-          <dd class="accordion-content" style="display:none">
-            <form class="form-search" action="#" onsubmit="return false;">
-              <input class="form-input" type="text" placeholder="Search for docker images..." id="txtSearchDockerImages">
-              <button class="button button-icon">
-                <img src="images/search.svg" alt="search icon" width="35" height="35">
-              </button>
-            </form>
-            <div id="listDockerImages">
-              <ul class="list-result" id="listDockerImages">
-                <li class='no-result'>Please search for docker images.</li>
-              </ul>
-            </div>
-          </dd>
-        </dl>
+        <div id="tabs-ops">
+          <ul>
+            <li><a href="#tabs-devops">DevOps</a></li>
+            <li><a href="#tabs-itops">ITOps</a></li>
+          </ul>
+          <div id="tabs-devops">
+            <dl class="accordion">
+              <dt class="accordion-heading show">
+                        <h4 class="title">Workflow Controls</h4>
+                        <i class="icon-toggle"></i>
+                    </dt>
+              <dd class="accordion-content" style="padding-top:0px">
+                <div id="listWorkflowControls">
+                  <ul class='list-result'>
+                    <li class='list' data-type="flowcontrol-start">
+                      <div class="area-image">
+                        <img class="image" src="images/start.png" alt="image logo">
+                      </div>
+                      <div class='area-content'>
+                        <h3 class="title"><a class="link" href="#">Start</a></h3>
+                      </div>
+                    </li>
+                    <li class='list' data-type="flowcontrol-end">
+                      <div class="area-image">
+                        <img class="image" src="images/exit.png" alt="image logo">
+                      </div>
+                      <div class='area-content'>
+                        <h3 class="title"><a class="link" href="#">Exit</a></h3>
+                      </div>
+                    </li>
+                    <li class='list' data-type="flowcontrol-condition">
+                      <div class="area-image">
+                        <img class="image" src="images/condition-white.png" alt="image logo">
+                      </div>
+                      <div class='area-content'>
+                        <h3 class="title"><a class="link" href="#">Condition</a></h3>
+                      </div>
+                    </li>
+                    <li class='list' data-type="flowcontrol-loop">
+                      <div class="area-image">
+                        <img class="image" src="images/loop-white.png" alt="image logo">
+                      </div>
+                      <div class='area-content'>
+                        <h3 class="title"><a class="link" href="#">Loop</a></h3>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </dd>
+            </dl>
+            <dl class="accordion">
+              <dt class="accordion-heading">
+                        <h4 class="title">Docker Images</h4>
+                        <i class="icon-toggle"></i>
+                    </dt>
+              <dd class="accordion-content" style="display:none">
+                <form class="form-search" action="#" onsubmit="return false;">
+                  <input class="form-input" type="text" placeholder="Search for docker images..." id="txtSearchDockerImages">
+                  <button class="button button-icon">
+                    <img src="images/search.svg" alt="search icon" width="35" height="35">
+                  </button>
+                </form>
+                <div id="listDockerImages">
+                  <ul class="list-result" id="listDockerImages">
+                    <li class='no-result'>Please search for docker images.</li>
+                  </ul>
+                </div>
+              </dd>
+            </dl>
+          </div>
+          <div id="tabs-itops">
+            Something went there
+          </div>
+        </div>
       </div>
       <div class="col-primary demo" id='myCanvas'>
 
@@ -378,9 +389,6 @@
         <input type="button" value="cancel" id="cancelButton" />
       </div>
       <div id='popupLoops' style='display:none'></div>
-      <div id="dialog" title="Basic dialog">
-        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
-      </div>
       <script>
         if (typeof module === 'object') {
           window.module = module;

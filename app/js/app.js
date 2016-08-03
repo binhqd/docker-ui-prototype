@@ -279,7 +279,9 @@ $(document).ready(function() {
         sendHostCommand(val);
       }
     }
-  })
+  });
+
+  $( "#tabs-ops" ).tabs();
 });
 
 var cmdHistory = [];
