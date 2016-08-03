@@ -354,9 +354,10 @@ function setupDroppable(canvas, dataContainer) {
   canvas.droppable({
     tolerance: 'pointer',
     drop: function(event, ui) {
-      if (currentDataContainer[currentDataContainer.length - 1] !== dataContainer) {
+      if (currentDataContainer[currentDataContainer.length - 1].id !== dataContainer.id) {
         return;
       }
+
       event.preventDefault();
 
       var uiType = ui.draggable.attr('data-type');
@@ -455,7 +456,7 @@ function setupDroppable(canvas, dataContainer) {
           var container = addNode(ui.helper.attr('data-tag'), options, dataContainer);
 
           $('#popupLoops').append($('<div class="dialog-workflow" id="popup-workflow-loop-' + container.id + '"><div class="loop-canvas"></div></div>'));
-          loopDataContainer['data-' + container.id] = initDataContainer({});
+          loopDataContainer['data-' + container.id] = initDataContainer({id: container.id});
 
           draw('#popup-workflow-loop-' + container.id + ' .loop-canvas', {}, loopDataContainer['data-' + container.id]);
 
@@ -512,16 +513,18 @@ function getNextId(dataContainer) {
   var id = 0;
   for (var key in dataContainer['nodes']._data) {
     if (id === 0) {
-      id = parseInt(dataContainer['nodes']._data[key].id);
+      id = parseInt(dataContainer['nodes']._data[key].index);
     } else {
-      var _currentID = parseInt(dataContainer['nodes']._data[key].id);
+      var _currentID = parseInt(dataContainer['nodes']._data[key].index);
       if (_currentID > id) {
         id = _currentID;
       }
     }
   }
 
-  return ++id;
+  id++;
+
+  return id;
 }
 
 function linkContainers(srcID, desId, dataContainer) {
@@ -546,10 +549,17 @@ function addNode(label, options, dataContainer) {
     dataContainer = window;
   }
 
-  var id = getNextId(dataContainer);
+  var _nextId = getNextId(dataContainer);
+  var id = _nextId;
+
+  if (dataContainer.id) {
+    id = dataContainer.id + "-" + _nextId
+  }
+
   try {
     var _defaultOptions = {
       id: id,
+      index: _nextId,
       label: label + '\nID: ' + id,
       font: {
         align: 'left'
@@ -639,7 +649,7 @@ function addEdge(linkOptions, callback, dataContainer) {
         linkOptions.shadow = true;
         linkOptions.dashes = true;
         linkOptions.color = {
-          color: '#ff0000'
+          color: '#000000'
         }
 
         // allow link to end if there still a path
@@ -711,6 +721,7 @@ function addEdge(linkOptions, callback, dataContainer) {
 function initDataContainer(container) {
   if (!container) {
     container = window;
+    container.id = 'window';
   }
 
   container.currentWorkflow = {
@@ -719,6 +730,9 @@ function initDataContainer(container) {
   }
 
   container['hashContainers'] = [];
+  container['di'] = {
+    selected: null
+  };
 
   return container;
 }
