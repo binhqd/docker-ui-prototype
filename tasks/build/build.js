@@ -109,7 +109,7 @@ gulp.task('watch', function () {
 
 
 gulp.task('build', ['clean'], function() {
-  return gulp.start(['bundle', 'less', 'copy', 'environment', 'package-json', 'es6-transformed'], function() {
+  return gulp.start(['bundle', 'less', 'copy', 'environment', 'package-json'], function() {
 
     return gulp.start(['inject'], function() {
       return gulp.start(['bundle'], function() {
