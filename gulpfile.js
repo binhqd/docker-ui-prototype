@@ -27,7 +27,7 @@ var paths = {
     './app/node_modules/rivets/dist/rivets.js'
   ],
   es6Files: [
-    './app/node_modules/jquery-ui/scripts/transform.js'
+
   ]
 };
 

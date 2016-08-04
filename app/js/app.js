@@ -858,7 +858,8 @@ function draw(selector, options, dataContainer) {
       dragView: true,
       zoomView: true,
       selectConnectedEdges: false,
-      dragNodes: true
+      dragNodes: true,
+      multiselect: false
     },
     manipulation: {
       enabled: true,
