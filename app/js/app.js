@@ -99,176 +99,176 @@ $(document).ready(function() {
   });
 
   // testing only
-  // var response = {
-  //   "count": 3756,
-  //   "next": "https://hub.docker.com/v2/search/repositories/?query=mysql&page=2&page_size=20",
-  //   "previous": null,
-  //   "results": [{
-  //     "star_count": 2547,
-  //     "pull_count": 20803174,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL is a widely used, open-source relational database management system (RDBMS).",
-  //     "is_automated": false,
-  //     "is_official": true,
-  //     "repo_name": "mysql"
-  //   }, {
-  //     "star_count": 164,
-  //     "pull_count": 211591,
-  //     "repo_owner": null,
-  //     "short_description": "Optimized MySQL Server Docker images. Created, maintained and supported by the MySQL team at Oracle",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "mysql/mysql-server"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 1191,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL (MariaDB fork) Docker image.",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "tozd/mysql"
-  //   }, {
-  //     "star_count": 45,
-  //     "pull_count": 5857293,
-  //     "repo_owner": null,
-  //     "short_description": "Image containing mysql. Optimized to be linked to another image/container.",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "centurylink/mysql"
-  //   }, {
-  //     "star_count": 8,
-  //     "pull_count": 48941,
-  //     "repo_owner": null,
-  //     "short_description": "Centos/Debian Based Customizable MySQL Container - Updated 06/16/2016",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "appcontainers/mysql"
-  //   }, {
-  //     "star_count": 2,
-  //     "pull_count": 729,
-  //     "repo_owner": null,
-  //     "short_description": "Docker Mysql",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "alterway/mysql"
-  //   }, {
-  //     "star_count": 2,
-  //     "pull_count": 499,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL for Drupal",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "drupaldocker/mysql"
-  //   }, {
-  //     "star_count": 2,
-  //     "pull_count": 395,
-  //     "repo_owner": null,
-  //     "short_description": "Yfix docker built mysql",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "yfix/mysql"
-  //   }, {
-  //     "star_count": 1,
-  //     "pull_count": 486,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL server image",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "phpmentors/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 247670,
-  //     "repo_owner": null,
-  //     "short_description": "Improved `mysql` service with support for `mysqld_safe` and `fixtures` loaded from `mysqldump.sql`",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "cloudposse/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 805,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL service for nanobox.io",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "nanobox/mysql"
-  //   }, {
-  //     "star_count": 36,
-  //     "pull_count": 1192550,
-  //     "repo_owner": null,
-  //     "short_description": "",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "sameersbn/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 2111,
-  //     "repo_owner": null,
-  //     "short_description": "Build for MySQL. Project available on https://github.com/vukor/docker-web-stack",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "vukor/mysql"
-  //   }, {
-  //     "star_count": 6,
-  //     "pull_count": 1485,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL Server based on Ubuntu 14.04",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "marvambass/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 1770,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL is a widely used, open-source relational database management system (RDBMS).",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "lancehudson/docker-mysql"
-  //   }, {
-  //     "star_count": 1,
-  //     "pull_count": 104,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL images with my own config files.",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "sin30/mysql"
-  //   }, {
-  //     "star_count": 2,
-  //     "pull_count": 3131,
-  //     "repo_owner": null,
-  //     "short_description": "Docker image to run MySQL by Azuki - http://azk.io",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "azukiapp/mysql"
-  //   }, {
-  //     "star_count": 1,
-  //     "pull_count": 75,
-  //     "repo_owner": null,
-  //     "short_description": "mysql",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "kaluzki/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 113,
-  //     "repo_owner": null,
-  //     "short_description": "akilli/base based MySQL image",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "akilli/mysql"
-  //   }, {
-  //     "star_count": 0,
-  //     "pull_count": 208,
-  //     "repo_owner": null,
-  //     "short_description": "MySQL",
-  //     "is_automated": true,
-  //     "is_official": false,
-  //     "repo_name": "livingobjects/mysql"
-  //   }]
-  // };
-  // var html = template(response);
-  //
-  // $('#listDockerImages ul').remove();
-  // $('#listDockerImages').append(html);
+  var response = {
+    "count": 3756,
+    "next": "https://hub.docker.com/v2/search/repositories/?query=mysql&page=2&page_size=20",
+    "previous": null,
+    "results": [{
+      "star_count": 2547,
+      "pull_count": 20803174,
+      "repo_owner": null,
+      "short_description": "MySQL is a widely used, open-source relational database management system (RDBMS).",
+      "is_automated": false,
+      "is_official": true,
+      "repo_name": "mysql"
+    }, {
+      "star_count": 164,
+      "pull_count": 211591,
+      "repo_owner": null,
+      "short_description": "Optimized MySQL Server Docker images. Created, maintained and supported by the MySQL team at Oracle",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "mysql/mysql-server"
+    }, {
+      "star_count": 0,
+      "pull_count": 1191,
+      "repo_owner": null,
+      "short_description": "MySQL (MariaDB fork) Docker image.",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "tozd/mysql"
+    }, {
+      "star_count": 45,
+      "pull_count": 5857293,
+      "repo_owner": null,
+      "short_description": "Image containing mysql. Optimized to be linked to another image/container.",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "centurylink/mysql"
+    }, {
+      "star_count": 8,
+      "pull_count": 48941,
+      "repo_owner": null,
+      "short_description": "Centos/Debian Based Customizable MySQL Container - Updated 06/16/2016",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "appcontainers/mysql"
+    }, {
+      "star_count": 2,
+      "pull_count": 729,
+      "repo_owner": null,
+      "short_description": "Docker Mysql",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "alterway/mysql"
+    }, {
+      "star_count": 2,
+      "pull_count": 499,
+      "repo_owner": null,
+      "short_description": "MySQL for Drupal",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "drupaldocker/mysql"
+    }, {
+      "star_count": 2,
+      "pull_count": 395,
+      "repo_owner": null,
+      "short_description": "Yfix docker built mysql",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "yfix/mysql"
+    }, {
+      "star_count": 1,
+      "pull_count": 486,
+      "repo_owner": null,
+      "short_description": "MySQL server image",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "phpmentors/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 247670,
+      "repo_owner": null,
+      "short_description": "Improved `mysql` service with support for `mysqld_safe` and `fixtures` loaded from `mysqldump.sql`",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "cloudposse/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 805,
+      "repo_owner": null,
+      "short_description": "MySQL service for nanobox.io",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "nanobox/mysql"
+    }, {
+      "star_count": 36,
+      "pull_count": 1192550,
+      "repo_owner": null,
+      "short_description": "",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "sameersbn/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 2111,
+      "repo_owner": null,
+      "short_description": "Build for MySQL. Project available on https://github.com/vukor/docker-web-stack",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "vukor/mysql"
+    }, {
+      "star_count": 6,
+      "pull_count": 1485,
+      "repo_owner": null,
+      "short_description": "MySQL Server based on Ubuntu 14.04",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "marvambass/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 1770,
+      "repo_owner": null,
+      "short_description": "MySQL is a widely used, open-source relational database management system (RDBMS).",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "lancehudson/docker-mysql"
+    }, {
+      "star_count": 1,
+      "pull_count": 104,
+      "repo_owner": null,
+      "short_description": "MySQL images with my own config files.",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "sin30/mysql"
+    }, {
+      "star_count": 2,
+      "pull_count": 3131,
+      "repo_owner": null,
+      "short_description": "Docker image to run MySQL by Azuki - http://azk.io",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "azukiapp/mysql"
+    }, {
+      "star_count": 1,
+      "pull_count": 75,
+      "repo_owner": null,
+      "short_description": "mysql",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "kaluzki/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 113,
+      "repo_owner": null,
+      "short_description": "akilli/base based MySQL image",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "akilli/mysql"
+    }, {
+      "star_count": 0,
+      "pull_count": 208,
+      "repo_owner": null,
+      "short_description": "MySQL",
+      "is_automated": true,
+      "is_official": false,
+      "repo_name": "livingobjects/mysql"
+    }]
+  };
+  var html = template(response);
+
+  $('#listDockerImages ul').remove();
+  $('#listDockerImages').append(html);
 
   applyDragDrop();
 
@@ -281,7 +281,7 @@ $(document).ready(function() {
     }
   });
 
-  $( "#tabs-ops" ).tabs();
+  $("#tabs-ops").tabs();
 });
 
 var cmdHistory = [];
@@ -460,7 +460,9 @@ function setupDroppable(canvas, dataContainer) {
           var container = addNode(ui.helper.attr('data-tag'), options, dataContainer);
 
           $('#popupLoops').append($('<div class="dialog-workflow" id="popup-workflow-loop-' + container.id + '"><div class="loop-canvas"></div></div>'));
-          loopDataContainer['data-' + container.id] = initDataContainer({id: container.id});
+          loopDataContainer['data-' + container.id] = initDataContainer({
+            id: container.id
+          });
 
           draw('#popup-workflow-loop-' + container.id + ' .loop-canvas', {}, loopDataContainer['data-' + container.id]);
 
@@ -609,7 +611,7 @@ function findContainer(id, dataContainer) {
   return null;
 }
 
-function findLink(id) {
+function findLink(id, dataContainer) {
   for (var i in dataContainer['edges']._data) {
     if (dataContainer['edges']._data[i].id == id) {
       return dataContainer['edges']._data[i];
@@ -630,6 +632,7 @@ function addEdge(linkOptions, callback, dataContainer) {
     console.log(_from, _to);
 
     if (_from.type == 'flowcontrol-condition') {
+      linkOptions.type = 'flowcontrol-condition';
       if (['flowcontrol-condition', 'docker-image', 'flowcontrol-end', 'flowcontrol-loop'].indexOf(_to.type) != -1) {
 
         if (!_from.hasTrueCondition) {
@@ -639,6 +642,8 @@ function addEdge(linkOptions, callback, dataContainer) {
             enabled: true,
             type: 'curvedCW'
           }
+
+          linkOptions.typeValue = true;
         } else {
           linkOptions.label = "False";
           _from.hasFalseCondition = true;
@@ -648,6 +653,7 @@ function addEdge(linkOptions, callback, dataContainer) {
             enabled: true,
             type: 'curvedCCW'
           }
+          linkOptions.typeValue = false;
         }
 
         linkOptions.shadow = true;
@@ -671,6 +677,7 @@ function addEdge(linkOptions, callback, dataContainer) {
         }
       }
     } else if (['flowcontrol-loop'].indexOf(_from.type) != -1) {
+      linkOptions.type = 'ExitLoop';
       if (['docker-image', 'flowcontrol-condition'].indexOf(_to.type) != -1) {
         dataContainer['edges'].add(linkOptions);
 
@@ -905,26 +912,38 @@ function draw(selector, options, dataContainer) {
 
   dataContainer['network'].on("deselectEdge", function(params) {
     dataContainer['di'].selected = null;
-    $('#linkProps').hide();
+    $('#linkProps, #conditionProps').hide();
     if (currentLinkBinding) {
       currentLinkBinding.unbind();
     }
 
-    if (params.links.length == 0) {
-      // TODO: Disable property inputs
-    }
   });
 
   dataContainer['network'].on("selectEdge", function(params) {
     if (params.edges.length > 0) {
-      var filters = findLink(params.edges[0]);
-      if (filters.length) {
-        dataContainer['di'].selectedLink = filters[0];
+
+      var link = findLink(params.edges[0], dataContainer);
+
+      if (link) {
+        dataContainer['di'].selectedLink = link;
       } else {
         dataContainer['di'].selectedLink = null;
       }
 
-      $('#linkProps').show();
+      var selector = '#linkProps';
+      if (link.type && link.type == 'flowcontrol-condition') {
+        selector = '#conditionProps';
+      }
+
+      $(selector).show();
+      $(selector + ' .accordion-heading').each(function() {
+        var $this = $(this);
+
+        $this.find('.icon-toggle').addClass('open');
+        $this.addClass('show');
+        $this.next().slideDown(350);
+
+      });
 
       currentLinkBinding = rivets.bind($('#linkProps'), {
         linkProps: dataContainer['di'].selectedLink
