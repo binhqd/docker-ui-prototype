@@ -31,7 +31,7 @@ function doSearch(event) {
     var url = 'https://hub.docker.com/v2/search/repositories/?page=1&query=' + encodeURIComponent(searchTerm) + '&page_size=20';
 
     $('#listDockerImages ul').remove();
-    $('#listDockerImages').append($('<ul class="list-result"><li>Looking for docker images ...</li></ul>'));
+    $('#listDockerImages').append($('<ul class="list-result"><li class="searching">Looking for docker images ...</li></ul>'));
     $.ajax({
       url: url,
       success: function(response) {
@@ -672,25 +672,7 @@ function addEdge(linkOptions, callback, dataContainer) {
       }
     } else if (['flowcontrol-loop'].indexOf(_from.type) != -1) {
       if (['docker-image', 'flowcontrol-condition'].indexOf(_to.type) != -1) {
-        linkOptions.shadow = true;
-        linkOptions.dashes = true;
-        linkOptions.color = {
-          color: '#00ff00'
-        }
-        linkOptions.smooth = {
-          enabled: true,
-          type: 'curvedCCW'
-        }
-
         dataContainer['edges'].add(linkOptions);
-
-        // add rotate back
-        var linkOptionsCW = $.extend({}, linkOptions);
-        delete linkOptionsCW.id;
-        var tmp = linkOptionsCW.to;
-        linkOptionsCW.to = linkOptionsCW.from;
-        linkOptionsCW.from = tmp;
-        dataContainer['edges'].add(linkOptionsCW);
 
         _from.allow = false;
       }

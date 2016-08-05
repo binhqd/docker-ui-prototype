@@ -451,6 +451,6 @@ select.form-input {
   padding: 10px;
   text-align: center;
 }
-.no-result {
+.no-result, .searching {
   color: #fff;
 }
