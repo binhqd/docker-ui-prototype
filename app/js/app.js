@@ -901,7 +901,7 @@ function draw(selector, options, dataContainer) {
       x: 0,
       y: 0
     },
-    scale: 1
+    scale: 0.8
   });
   dataContainer['network'].on('release', function(a, b, c, d) {
     console.log(a, b, c, d);
