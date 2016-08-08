@@ -1006,24 +1006,30 @@ function draw(selector, options, dataContainer) {
 
       $('.item-props').hide();
 
+      var $this;
       switch (node.type) {
         case 'flowcontrol-condition':
-          $('#conditionProps').show();
+          $this = $('#conditionProps');
           break;
         default:
-          $('#containerProps').show();
+          $this = $('#containerProps');
 
           currentBinding = rivets.bind($('#containerProps'), {
             containerProps: dataContainer['di'].selected
           });
           break;
       }
+
+      $this.show();
+      $this.find('.accordion-heading:first').next().slideDown(350);
+      $this.find('.accordion-heading:first .icon-toggle').addClass('open');
+      $this.addClass('show');
     }
   });
 
   dataContainer['network'].on("deselectNode", function(params) {
     dataContainer['di'].selected = null;
-    $('#containerProps').hide();
+    $('#containerProps, #linkProps, #conditionProps').hide();
     if (currentBinding) {
       currentBinding.unbind();
     }
