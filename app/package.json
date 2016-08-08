@@ -1,10 +1,10 @@
 {
-  "name": "electron-boilerplate",
-  "productName": "Electron Boilerplate",
-  "description": "Starter for your Electron application. Out of the box ready for serious stuff.",
+  "name": "workflow-ui",
+  "productName": "Workflow UI",
+  "description": "Workflow UI for designing docker eco-system",
   "version": "0.1.0",
-  "author": "Mr Gumby",
-  "copyright": "© 2016, your company here",
+  "author": "BinhQD",
+  "copyright": "© 2016, GreenGlobal",
   "main": "background.js",
   "dependencies": {
     "fs-jetpack": "^0.9.2",
@@ -17,12 +17,12 @@
   "packageNameTemplate": "{{name}}-v{{version}}-{{platform}}-{{arch}}",
   "osx": {
     "build": "1",
-    "identifier": "com.example.electron-boilerplate",
+    "identifier": "com.example.workflow-ui",
     "LSApplicationCategoryType": "public.app-category.productivity",
     "//codeSignIdentitiy": {
-      "dmg": "Developer ID Application: Company Name (APPIDENTITY)",
-      "MAS": "3rd Party Mac Developer Application: Company Name (APPIDENTITY)",
-      "MASInstaller": "3rd Party Mac Developer Installer: Company Name (APPIDENTITY)"
+      "dmg": "Developer ID Application: GreenGlobal (APPIDENTITY)",
+      "MAS": "3rd Party Mac Developer Application: GreenGlobal (APPIDENTITY)",
+      "MASInstaller": "3rd Party Mac Developer Installer: GreenGlobal (APPIDENTITY)"
     }
   },
   "devDependencies": {
